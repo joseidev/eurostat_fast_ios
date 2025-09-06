@@ -1,14 +1,13 @@
-// Data/Network/Endpoints.swift
 import Foundation
 
-struct Endpoint {
-    let path: String
-    let method: HTTPMethod
-    let headers: [String: String]?
-    let body: Data?
-    let queryItems: [URLQueryItem]?
+public struct Endpoint {
+    public let path: String
+    public let method: HTTPMethod
+    public let headers: [String: String]?
+    public let body: Data?
+    public let queryItems: [URLQueryItem]?
     
-    init(
+    public init(
         path: String,
         method: HTTPMethod = .get,
         headers: [String: String]? = nil,
@@ -36,7 +35,7 @@ struct Endpoint {
     }
 }
 
-enum HTTPMethod: String {
+public enum HTTPMethod: String {
     case get = "GET"
     case post = "POST"
     case put = "PUT"

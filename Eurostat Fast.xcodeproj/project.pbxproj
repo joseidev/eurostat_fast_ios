@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		76F958EE2E6C89A300E117F3 /* EurostatFastApp in Frameworks */ = {isa = PBXBuildFile; productRef = 76F958ED2E6C89A300E117F3 /* EurostatFastApp */; };
+		76F95B632E6CDE4000E117F3 /* FactoryKit in Frameworks */ = {isa = PBXBuildFile; productRef = 76F95B622E6CDE4000E117F3 /* FactoryKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76F95B632E6CDE4000E117F3 /* FactoryKit in Frameworks */,
 				76F958EE2E6C89A300E117F3 /* EurostatFastApp in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -73,6 +75,7 @@
 			name = "Eurostat Fast";
 			packageProductDependencies = (
 				76F958ED2E6C89A300E117F3 /* EurostatFastApp */,
+				76F95B622E6CDE4000E117F3 /* FactoryKit */,
 			);
 			productName = "Eurostat Fast";
 			productReference = 762162B72E6C875600C452FA /* Eurostat Fast.app */;
@@ -103,6 +106,7 @@
 			mainGroup = 762162AE2E6C875600C452FA;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				76F95B612E6CDE4000E117F3 /* XCRemoteSwiftPackageReference "Factory" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 762162B82E6C875600C452FA /* Products */;
@@ -343,10 +347,26 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		76F95B612E6CDE4000E117F3 /* XCRemoteSwiftPackageReference "Factory" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hmlongco/Factory";
+			requirement = {
+				kind = exactVersion;
+				version = 2.5.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		76F958ED2E6C89A300E117F3 /* EurostatFastApp */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = EurostatFastApp;
+		};
+		76F95B622E6CDE4000E117F3 /* FactoryKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 76F95B612E6CDE4000E117F3 /* XCRemoteSwiftPackageReference "Factory" */;
+			productName = FactoryKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

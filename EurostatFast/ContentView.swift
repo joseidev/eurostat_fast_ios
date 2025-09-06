@@ -1,8 +1,10 @@
-import Data
+import Domain
+import FactoryKit
 import SwiftUI
 
 struct ContentView: View {
-    let metadataRepository = DefaultMetadataRepository()
+    @Injected(\.metadataRepository) private var metadataRepository
+    
     var body: some View {
         VStack {
             Image(systemName: "globe")

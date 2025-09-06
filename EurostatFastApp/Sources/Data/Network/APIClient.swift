@@ -1,17 +1,14 @@
+import Domain
 import Foundation
 
-protocol APIClient {
-    func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T
-}
-
-final class DefaultAPIClient: APIClient {
+public struct DefaultAPIClient: APIClient {
     private let session: URLSession
     
-    init(session: URLSession = .shared) {
+    public init(session: URLSession = .shared) {
         self.session = session
     }
     
-    func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
+    public func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
         let request = try buildRequest(endpoint)
         log(request: request)
         let (data, response) = try await session.data(for: request)
