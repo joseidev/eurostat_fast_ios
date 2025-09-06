@@ -5,15 +5,20 @@ import PackageDescription
 
 let package = Package(
     name: "EurostatFastApp",
+    platforms: [.iOS(.v17)],
     products: [
         .library(
             name: "EurostatFastApp",
-            targets: ["Data"]
+            targets: ["Data", "Domain"]
         ),
     ],
     targets: [
         .target(
-            name: "Data"
+            name: "Data",
+            dependencies: ["Domain"]
+        ),
+        .target(
+            name: "Domain"
         ),
 
     ]

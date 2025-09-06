@@ -2,7 +2,7 @@ import Data
 import SwiftUI
 
 struct ContentView: View {
-    let data = DataMain()
+    let metadataRepository = DefaultMetadataRepository()
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -11,8 +11,13 @@ struct ContentView: View {
             Text("Hello, world!")
         }
         .padding()
-        .onAppear {
-            data.test()
+        .task {
+            do {
+                let metadata = try await metadataRepository.requestMetadata()
+                print(metadata)
+            } catch {
+                print(error.localizedDescription)
+            }
         }
     }
 }
