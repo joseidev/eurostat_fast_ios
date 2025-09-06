@@ -1,0 +1,52 @@
+# Xcode
+.DS_Store
+*/.DS_Store
+*/xcuserdata/
+*.xccheckout
+*.xcscmblueprint
+*.xcuserstate
+*.xcworkspace/xcuserdata
+*.xcuserdatad
+*.moved-aside
+*.hmap
+*.ipa
+
+# Build products
+build/
+DerivedData/
+*.o
+*.LinkFileList
+*.d
+
+# Swift Package Manager
+.swiftpm/
+.build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output/
+
+# Code coverage
+*.xccovreport
+*.xccovarchive
+
+# Archives
+*.xcarchive
+
+# Symbolication
+*.dSYM.zip
+*.dSYM
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# IDE
+.idea/
+.vscode/
+
+# Others
+*.swp
+*.lock
