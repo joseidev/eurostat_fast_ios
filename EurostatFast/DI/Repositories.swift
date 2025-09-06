@@ -11,4 +11,8 @@ extension Container {
     var metadataRepository: Factory<MetadataRepository> {
         self { @MainActor in DefaultMetadataRepository(apiClient: self.apliClient()) }
     }
+    
+    var parameterRepository: Factory<ParameterRepository> {
+        self { @MainActor in DefaultParameterRepository(apiClient: self.apliClient())}
+    }
 }

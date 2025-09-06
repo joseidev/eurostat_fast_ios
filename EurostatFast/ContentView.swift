@@ -3,8 +3,7 @@ import FactoryKit
 import SwiftUI
 
 struct ContentView: View {
-    @Injected(\.metadataRepository) private var metadataRepository
-    
+    @Injected(\.parameterRepository) var parameterRepository
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -15,8 +14,8 @@ struct ContentView: View {
         .padding()
         .task {
             do {
-                let metadata = try await metadataRepository.requestMetadata()
-                print(metadata)
+                let parameters = try await parameterRepository.requestParameters()
+                print(parameters)
             } catch {
                 print(error.localizedDescription)
             }
