@@ -1,8 +1,8 @@
-//
-
+import Data
 import SwiftUI
 
 struct ContentView: View {
+    let data = DataMain()
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -11,6 +11,9 @@ struct ContentView: View {
             Text("Hello, world!")
         }
         .padding()
+        .onAppear {
+            data.test()
+        }
     }
 }
 
