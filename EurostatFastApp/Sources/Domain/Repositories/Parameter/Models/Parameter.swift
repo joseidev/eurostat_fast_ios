@@ -1,10 +1,14 @@
 import Foundation
 
-public struct Parameter {
+public struct Parameter: Hashable, Identifiable {
     public let code: String
     public let name: String
     public let description: String
     public let values: [Value]
+    
+    public var id: String {
+        code
+    }
     
     public init(code: String, name: String, description: String, values: [Value]) {
         self.code = code
@@ -15,7 +19,7 @@ public struct Parameter {
 }
 
 public extension Parameter {
-    struct Value {
+    struct Value: Hashable {
         public let code: String
         public let description: String
         

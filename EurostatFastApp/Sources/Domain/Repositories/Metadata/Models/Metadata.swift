@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Metadata {
+public struct Metadata: Hashable, Identifiable {
     public let id: Int
     public let code: String
     public let eurostatLastUpdate: Date
@@ -32,7 +32,7 @@ public struct Metadata {
 }
 
 public extension Metadata {
-    struct QueryParams {
+    struct QueryParams: Hashable {
         public let geo: [String]
         
         public init(geo: [String]) {

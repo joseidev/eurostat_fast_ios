@@ -1,7 +1,7 @@
 import Domain
 import Foundation
 
-struct ParameterDTO: Decodable {
+struct ParameterDTO: Codable {
     let code: String
     let name: String
     let description: String
@@ -18,7 +18,7 @@ struct ParameterDTO: Decodable {
 }
 
 extension ParameterDTO {
-    struct Value: Decodable {
+    struct Value: Codable {
         let code: String
         let description: String
         

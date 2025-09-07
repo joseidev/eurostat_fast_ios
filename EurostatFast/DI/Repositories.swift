@@ -8,11 +8,21 @@ extension Container {
         self { DefaultAPIClient() }
     }
     
+    var memoryCache: Factory<MemoryCache> {
+        self { MemoryCache() }.singleton
+    }
+    
     var metadataRepository: Factory<MetadataRepository> {
-        self { @MainActor in DefaultMetadataRepository(apiClient: self.apliClient()) }
+        self { @MainActor in DefaultMetadataRepository(
+            apiClient: self.apliClient(),
+            memoryCache: self.memoryCache()
+        ) }
     }
     
     var parameterRepository: Factory<ParameterRepository> {
-        self { @MainActor in DefaultParameterRepository(apiClient: self.apliClient())}
+        self { @MainActor in DefaultParameterRepository(
+            apiClient: self.apliClient(),
+            memoryCache: self.memoryCache()
+        )}
     }
 }

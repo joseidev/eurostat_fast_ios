@@ -1,7 +1,7 @@
 import Domain
 import Foundation
 
-struct MetadataDTO: Decodable {
+struct MetadataDTO: Codable {
     let id: Int
     let code: String
     let eurostatLastUpdate: Date
@@ -26,7 +26,7 @@ struct MetadataDTO: Decodable {
 }
 
 extension MetadataDTO {
-    struct QueryParams: Decodable {
+    struct QueryParams: Codable {
         let geo: [String]?
         
         var model: Metadata.QueryParams {
