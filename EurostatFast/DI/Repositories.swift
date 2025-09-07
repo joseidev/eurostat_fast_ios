@@ -9,7 +9,7 @@ extension Container {
     }
     
     var memoryCache: Factory<MemoryCache> {
-        self { MemoryCache() }.singleton
+        self { DefaultMemoryCache() }.singleton
     }
     
     var metadataRepository: Factory<MetadataRepository> {

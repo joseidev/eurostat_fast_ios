@@ -1,6 +1,7 @@
+import Domain
 import Foundation
 
-public final class MemoryCache {
+public final class DefaultMemoryCache: MemoryCache {
     private var cache = [String: Codable]()
     
     public init() {}
