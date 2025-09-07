@@ -20,7 +20,7 @@ public struct DefaultDatasetDataRepository: DatasetDataRepository {
             return dto.model
         }
         let path = path + "\(code)"
-        let endpoint = Endpoint(path: path, query: geoValues.geoQueryDict)
+        let endpoint = Endpoint(path: path, queryItems: geoValues.geoQueryItems)
         let dto: DatasetDataDTO = try await apiClient.request(endpoint)
         memoryCache.set(memoryCacheKey, dto)
         return dto.model

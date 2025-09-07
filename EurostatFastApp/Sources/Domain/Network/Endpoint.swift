@@ -12,13 +12,13 @@ public struct Endpoint {
         method: HTTPMethod = .get,
         headers: [String: String]? = nil,
         body: Encodable? = nil,
-        query: [String: CustomStringConvertible]? = nil
+        queryItems: [URLQueryItem]? = nil
     ) {
         self.path = path
         self.method = method
         self.headers = headers
         self.body = Self.buildBody(body)
-        self.queryItems = Self.buildQueryParams(query)
+        self.queryItems = queryItems
     }
 }
 
@@ -33,13 +33,6 @@ private extension Endpoint {
             debugPrint("⚠️ Error codificando body: \(error)")
             return nil
         }
-    }
-    
-    static func buildQueryParams(_ query: [String: CustomStringConvertible]?) -> [URLQueryItem]? {
-        guard let query else {
-            return nil
-        }
-        return query.map { URLQueryItem(name: $0.key, value: $0.value.description) }
     }
 }
 

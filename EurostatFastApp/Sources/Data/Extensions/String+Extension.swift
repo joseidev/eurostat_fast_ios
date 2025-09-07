@@ -1,9 +1,7 @@
 import Foundation
 
 extension [String] {
-    var geoQueryDict: [String: CustomStringConvertible] {
-        var result: [String: CustomStringConvertible] = [:]
-        self.forEach { result["geo"] = $0 }
-        return result
+    var geoQueryItems: [URLQueryItem] {
+        self.map { .init(name: "geo", value: $0)}
     }
 }
