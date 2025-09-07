@@ -17,21 +17,29 @@ public struct Endpoint {
         self.path = path
         self.method = method
         self.headers = headers
-        if let body {
-            do {
-                self.body = try JSONEncoder().encode(body)
-            } catch {
-                self.body = nil
-                debugPrint("⚠️ Error codificando body: \(error)")
-            }
-        } else {
-            self.body = nil
+        self.body = Self.buildBody(body)
+        self.queryItems = Self.buildQueryParams(query)
+    }
+}
+
+private extension Endpoint {
+    static func buildBody(_ body: Encodable?) -> Data? {
+        guard let body else {
+            return nil
         }
-        if let query = query {
-            self.queryItems = query.map { URLQueryItem(name: $0.key, value: $0.value.description) }
-        } else {
-            self.queryItems = nil
+        do {
+            return try JSONEncoder().encode(body)
+        } catch {
+            debugPrint("⚠️ Error codificando body: \(error)")
+            return nil
         }
+    }
+    
+    static func buildQueryParams(_ query: [String: CustomStringConvertible]?) -> [URLQueryItem]? {
+        guard let query else {
+            return nil
+        }
+        return query.map { URLQueryItem(name: $0.key, value: $0.value.description) }
     }
 }
 

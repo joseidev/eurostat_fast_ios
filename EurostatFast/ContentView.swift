@@ -4,7 +4,7 @@ import FactoryKit
 import SwiftUI
 
 struct ContentView: View {
-    @Injected(\.parameterRepository) var parameterRepository
+    @Injected(\.datasetDataRepository) var datasetDataRepository
     @Injected(\.memoryCache) var memoryCache
     var body: some View {
         VStack {
@@ -30,8 +30,8 @@ struct ContentView: View {
     
     func request() async {
         do {
-            let parameters = try await parameterRepository.requestParameters()
-            print(parameters)
+            let values = try await datasetDataRepository.requestDatasetData("TEINA010", ["ES", "IT"])
+            print(values)
         } catch {
             print(error.localizedDescription)
         }

@@ -25,4 +25,11 @@ extension Container {
             memoryCache: self.memoryCache()
         )}
     }
+    
+    var datasetDataRepository: Factory<DatasetDataRepository> {
+        self { @MainActor in DefaultDatasetDataRepository(
+            apiClient: self.apliClient(),
+            memoryCache: self.memoryCache()
+        )}
+    }
 }
