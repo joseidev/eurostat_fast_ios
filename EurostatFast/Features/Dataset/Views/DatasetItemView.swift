@@ -3,13 +3,25 @@ import SwiftUI
 struct DatasetItemView: View {
     var body: some View {
         VStack {
-            HStack {
-                Text("Total unemployment rate")
+            HStack(alignment: .top) {
+                VStack(alignment: .leading) {
+                    Text("Total unemployment rate")
+                        .font(.system(size: 12, weight: .bold))
+                    Text("2025-Q2")
+                        .font(.system(size: 8))
+                        .foregroundStyle(.black.opacity(0.6))
+                }
                 Spacer()
                 Text("13.5 %")
+                    .font(.system(size: 24, weight: .bold))
             }
             DatasetChartView(data: data)
-                .padding(.top, 16)
+                .padding(.top, 6)
+        }
+        .padding()
+        .background {
+            RoundedRectangle(cornerRadius: 6)
+                .fill(.white)
         }
     }
 }

@@ -11,6 +11,6 @@ struct DataSetPageScrollView<Content: View>: View {
             content
         }
         .tabViewStyle(.page)
-        .indexViewStyle(.page(backgroundDisplayMode: .always))
+        .indexViewStyle(.page(backgroundDisplayMode: .always))        
     }
 }

@@ -16,5 +16,6 @@ struct MainDatasetView: View {
             }
         }
         .padding()
+        .background(.black.opacity(0.05))        
     }
 }

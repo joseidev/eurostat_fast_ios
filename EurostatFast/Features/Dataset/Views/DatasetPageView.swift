@@ -4,8 +4,18 @@ struct DatasetPageView: View {
     var body: some View {
         VStack {
             Text("España")
-            DatasetItemView()
-                .padding(.top, 16)
+                .font(.title)
+            ScrollView {
+                DatasetItemView()
+                    .padding(.top, 8)
+                DatasetItemView()
+                    .padding(.top, 8)
+                DatasetItemView()
+                    .padding(.top, 8)
+                DatasetItemView()
+                    .padding(.top, 8)
+            }
+            .scrollIndicators(.hidden)
             Spacer()
         }
     }
