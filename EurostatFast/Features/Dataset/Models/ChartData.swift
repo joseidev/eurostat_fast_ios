@@ -1,6 +1,6 @@
 import Foundation
 
-struct ChartData: Identifiable {
+struct ChartData: Identifiable, Hashable {
     let id = UUID()
     let period: String
     let value: Double

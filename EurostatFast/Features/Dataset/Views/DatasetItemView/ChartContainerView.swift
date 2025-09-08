@@ -8,8 +8,8 @@ struct ChartContainerView: View {
     var body: some View {
         Chart(data) { point in
             LineMark(
-                x: .value("Periodo", point.period),
-                y: .value("Valor", point.value)
+                x: .value("", point.period),
+                y: .value("", point.value)
             )
             .foregroundStyle(
                 LinearGradient(
@@ -23,14 +23,14 @@ struct ChartContainerView: View {
                 )
             )
             PointMark(
-                x: .value("Periodo", point.period),
-                y: .value("Valor", point.value)
+                x: .value("", point.period),
+                y: .value("", point.value)
             )
             .symbolSize(16)
             .foregroundStyle(.clear)
             AreaMark(
-                x: .value("Periodo", point.period),
-                y: .value("Valor", point.value)
+                x: .value("", point.period),
+                y: .value("", point.value)
             )
             .foregroundStyle(
                 LinearGradient(

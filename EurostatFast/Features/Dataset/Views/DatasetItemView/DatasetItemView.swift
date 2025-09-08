@@ -1,13 +1,18 @@
 import SwiftUI
 
 struct DatasetItemView: View {
-    let data: [ChartData] = dataMock
+    struct PresentationModel: Identifiable, Hashable {
+        let id: String
+        let name: String
+        let data: [ChartData]
+    }
+    let presentationModel: PresentationModel
     @State private var selectedPeriod: String?
     
     var body: some View {
         VStack {
             HStack(alignment: .top) {
-                Text("Total unemployment rate")
+                Text(presentationModel.name)
                     .font(.system(size: 16, weight: .bold))
                 Spacer()
                 VStack(alignment: .trailing) {
@@ -20,18 +25,19 @@ struct DatasetItemView: View {
 
                 }
             }
-            ChartContainerView(data: data, selectedPeriod: $selectedPeriod)
+            ChartContainerView(data: presentationModel.data, selectedPeriod: $selectedPeriod)
         }
         .padding()
         .background {
             RoundedRectangle(cornerRadius: 6)
                 .fill(.white)
         }
+        .padding(.top, 8)
     }
     
     func getValueFromSelectedPeriod() -> String {
-        guard let data = data.first(where: {$0.period == selectedPeriod}) else {
-            guard let value = data.last?.value else {
+        guard let data = presentationModel.data.first(where: {$0.period == selectedPeriod}) else {
+            guard let value = presentationModel.data.last?.value else {
                 return ""
             }
             return String(value) + " %"
@@ -41,7 +47,7 @@ struct DatasetItemView: View {
     
     func getPeriodFromSelectedPeriod() -> String {
         guard let selectedPeriod else {
-            return data.last?.period ?? ""
+            return presentationModel.data.last?.period ?? ""
         }
         return selectedPeriod
     }

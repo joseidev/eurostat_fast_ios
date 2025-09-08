@@ -1,25 +1,20 @@
 import SwiftUI
 
 struct DatasetPageView: View {
+    struct PresentationModel: Hashable {
+        let name: String
+        let items: [DatasetItemView.PresentationModel]
+    }
+    let presentationModel: PresentationModel
+    
     var body: some View {
         VStack {
-            Text("España")
+            Text(presentationModel.name)
                 .font(.title)
             ScrollView {
-                DatasetItemView()
-                    .padding(.top, 8)
-                DatasetItemView()
-                    .padding(.top, 8)
-                DatasetItemView()
-                    .padding(.top, 8)
-                DatasetItemView()
-                    .padding(.top, 8)
-                DatasetItemView()
-                    .padding(.top, 8)
-                DatasetItemView()
-                    .padding(.top, 8)
-                DatasetItemView()
-                    .padding(.top, 8)
+                ForEach(presentationModel.items) { item in
+                    DatasetItemView(presentationModel: item)                        
+                }
             }
             .scrollIndicators(.hidden)
             .padding(.bottom, 24)

@@ -11,11 +11,14 @@ struct MainDatasetView: View {
             )
             .padding()
             DataSetPageScrollView {
-                DatasetPageView()
-                DatasetPageView()
-                DatasetPageView()
+                ForEach(viewModel.pages, id: \.self) { page in
+                    DatasetPageView(presentationModel: page)
+                }
             }
         }
-        .background(.black.opacity(0.05))        
+        .background(.black.opacity(0.05))
+        .task {
+            await viewModel.onAppear()
+        }
     }
 }
