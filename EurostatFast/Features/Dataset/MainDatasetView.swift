@@ -1,9 +1,14 @@
 import SwiftUI
 
 struct MainDatasetView: View {
+    @State var viewModel: MainDatasetViewModel = .init()
     var body: some View {
         VStack {
-            DatasetHeaderView(editAction: {}, addAction: {}, deleteAction: {})
+            DatasetHeaderView(
+                editAction: viewModel.didTapEditPage,
+                addAction: viewModel.didTapAddNewPage,
+                deleteAction: viewModel.didTapDeletePage
+            )
             DataSetPageScrollView {
                 DatasetPageView()
                 DatasetPageView()
@@ -13,5 +18,3 @@ struct MainDatasetView: View {
         .padding()
     }
 }
-
-
