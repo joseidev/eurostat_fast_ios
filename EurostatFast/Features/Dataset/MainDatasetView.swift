@@ -9,13 +9,13 @@ struct MainDatasetView: View {
                 addAction: viewModel.didTapAddNewPage,
                 deleteAction: viewModel.didTapDeletePage
             )
+            .padding()
             DataSetPageScrollView {
                 DatasetPageView()
                 DatasetPageView()
                 DatasetPageView()
             }
         }
-        .padding()
         .background(.black.opacity(0.05))        
     }
 }

@@ -14,9 +14,17 @@ struct DatasetPageView: View {
                     .padding(.top, 8)
                 DatasetItemView()
                     .padding(.top, 8)
+                DatasetItemView()
+                    .padding(.top, 8)
+                DatasetItemView()
+                    .padding(.top, 8)
+                DatasetItemView()
+                    .padding(.top, 8)
             }
             .scrollIndicators(.hidden)
+            .padding(.bottom, 24)
             Spacer()
         }
+        .padding()
     }
 }
