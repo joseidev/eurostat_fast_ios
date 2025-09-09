@@ -1,11 +1,6 @@
 import SwiftUI
 
 struct DatasetItemView: View {
-    struct PresentationModel: Identifiable, Hashable {
-        let id: String
-        let name: String
-        let data: [ChartData]
-    }
     let presentationModel: PresentationModel
     @State private var selectedPeriod: String?
     
@@ -25,7 +20,10 @@ struct DatasetItemView: View {
 
                 }
             }
-            ChartContainerView(data: presentationModel.data, selectedPeriod: $selectedPeriod)
+            DatasetChartView(
+                models: presentationModel.datasetChartModels,
+                selectedPeriod: $selectedPeriod
+            )
         }
         .padding()
         .background {
@@ -36,8 +34,8 @@ struct DatasetItemView: View {
     }
     
     func getValueFromSelectedPeriod() -> String {
-        guard let data = presentationModel.data.first(where: {$0.period == selectedPeriod}) else {
-            guard let value = presentationModel.data.last?.value else {
+        guard let data = presentationModel.datasetChartModels.first(where: {$0.period == selectedPeriod}) else {
+            guard let value = presentationModel.datasetChartModels.last?.value else {
                 return ""
             }
             return String(value) + " %"
@@ -47,7 +45,7 @@ struct DatasetItemView: View {
     
     func getPeriodFromSelectedPeriod() -> String {
         guard let selectedPeriod else {
-            return presentationModel.data.last?.period ?? ""
+            return presentationModel.datasetChartModels.last?.period ?? ""
         }
         return selectedPeriod
     }

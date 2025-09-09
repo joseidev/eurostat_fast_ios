@@ -1,12 +1,12 @@
 import Charts
 import SwiftUI
 
-struct ChartContainerView: View {
-    let data: [ChartData]
+struct DatasetChartView: View {
+    let models: [PresentationModel]
     @Binding var selectedPeriod: String?
     
     var body: some View {
-        Chart(data) { point in
+        Chart(models) { point in
             LineMark(
                 x: .value("", point.period),
                 y: .value("", point.value)

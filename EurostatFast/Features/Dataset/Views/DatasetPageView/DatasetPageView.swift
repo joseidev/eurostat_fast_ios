@@ -1,10 +1,6 @@
 import SwiftUI
 
 struct DatasetPageView: View {
-    struct PresentationModel: Hashable {
-        let name: String
-        let items: [DatasetItemView.PresentationModel]
-    }
     let presentationModel: PresentationModel
     
     var body: some View {
