@@ -2,13 +2,13 @@ import SwiftUI
 
 @Observable
 final class MainDatasetViewModel {
-    var pages: [DatasetPageView.PresentationModel] = []
+    var state: State = .loading
 }
 
 // MARK: - View actions
 extension MainDatasetViewModel {
     func onAppear() async {
-        pages = [.init(name: "España", items: [.init(id: "01", name: "Nombre", datasetChartModels: dataMock)])]
+//        state = .loaded([pageMock])
     }
     func didTapAddNewPage() {
         print("didTapAddNewPage")
@@ -21,6 +21,7 @@ extension MainDatasetViewModel {
     }
 }
 
+let pageMock: DatasetPageView.PresentationModel = .init(name: "España", items: [.init(id: "01", name: "Nombre", datasetChartModels: dataMock)])
 
 let dataMock: [DatasetChartView.PresentationModel] = [
     .init(period: "2022-Q3", value: 2.9),

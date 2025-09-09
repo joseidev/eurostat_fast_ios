@@ -9,7 +9,7 @@ let package = Package(
     products: [
         .library(
             name: "EurostatFastApp",
-            targets: ["Data", "Domain"]
+            targets: ["Data", "Domain", "UI"]
         ),
     ],
     targets: [
@@ -20,6 +20,8 @@ let package = Package(
         .target(
             name: "Domain"
         ),
-
+        .target(
+            name: "UI"
+        ),
     ]
 )

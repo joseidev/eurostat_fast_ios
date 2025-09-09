@@ -1,4 +1,5 @@
 import SwiftUI
+import UI
 
 struct MainDatasetView: View {
     @State var viewModel: MainDatasetViewModel = .init()
@@ -10,15 +11,44 @@ struct MainDatasetView: View {
                 deleteAction: viewModel.didTapDeletePage
             )
             .padding()
-            DataSetPageScrollView {
-                ForEach(viewModel.pages, id: \.self) { page in
-                    DatasetPageView(presentationModel: page)
+            switch viewModel.state {
+                case .loading:
+                LoadingStateView()
+            case .empty:
+                EmptyStateView()
+            case let .loaded(pages):
+                DataSetPageScrollView {
+                    ForEach(pages, id: \.self) { page in
+                        DatasetPageView(presentationModel: page)
+                    }
                 }
             }
         }
-        .background(.black.opacity(0.05))
+        .background(Color.Background.default)
         .task {
             await viewModel.onAppear()
+        }
+    }
+}
+
+private struct LoadingStateView: View {
+    var body: some View {
+        VStack {
+            Text("Loading data...")
+                .italic()
+                .padding(.top, 64)
+            ProgressView()
+            Spacer()
+        }
+    }
+}
+
+private struct EmptyStateView: View {
+    var body: some View {
+        VStack {
+            Text("Add a new page to start.")
+                .padding(.top, 64)
+            Spacer()
         }
     }
 }

@@ -1,6 +1,4 @@
 ### Mostrar una página
-- Organizar los presentation models a sus propios ficheros
-- ¿Que hacer con ChartData model?
 - Estado loading y llamar a metadata y parameters
 - Llamar a data por cada código
 - Cargar datos
