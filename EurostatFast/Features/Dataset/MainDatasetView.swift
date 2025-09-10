@@ -32,11 +32,27 @@ struct MainDatasetView: View {
         .task {
             await viewModel.onAppear()
         }
-        .sheet(isPresented: $isEditPageViewPresented) {
-            Text("Edit")
+        .fullScreenCover(isPresented: $isEditPageViewPresented) {
+            EditPageView(
+                isNewPage: false,
+                closeAction: {
+                    isEditPageViewPresented = false
+                },
+                saveAction: {
+                    
+                }
+            )
         }
-        .sheet(isPresented: $isAddPageViewPresented) {
-            Text("New")
+        .fullScreenCover(isPresented: $isAddPageViewPresented) {
+            EditPageView(
+                isNewPage: true,
+                closeAction: {
+                    isAddPageViewPresented = false
+                },
+                saveAction: {
+                    
+                }
+            )
         }
     }
 }
