@@ -1,7 +1,7 @@
 import Domain
 import Foundation
 
-public final class DefaultMemoryCache: MemoryCache {
+public actor DefaultMemoryCache: MemoryCache {
     private var cache = [String: Codable]()
     
     public init() {}
@@ -11,8 +11,10 @@ public final class DefaultMemoryCache: MemoryCache {
         cache[key] = object
     }
     
-    public func get<T: Codable>(_ key: String) -> T? {
-        guard let data = cache[key] as? T else { return nil }
+    public func get<T: Codable>(_ key: String) throws -> T {
+        guard let data = cache[key] as? T else {
+            throw APIError.notFoundInCache
+        }
         return data
     }
     

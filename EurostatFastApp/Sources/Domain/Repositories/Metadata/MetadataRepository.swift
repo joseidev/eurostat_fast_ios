@@ -1,3 +1,3 @@
-public protocol MetadataRepository {
+public protocol MetadataRepository: Sendable {
     func requestMetadata() async throws -> [Metadata]
 }

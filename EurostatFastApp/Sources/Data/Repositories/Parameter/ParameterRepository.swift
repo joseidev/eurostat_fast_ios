@@ -15,12 +15,19 @@ public struct DefaultParameterRepository: ParameterRepository {
     }
     
     public func requestParameters() async throws -> [Parameter] {
-        if let dtos: [ParameterDTO] = memoryCache.get(path) {
-            return dtos.map { $0.model }.sorted { $0.name < $1.name }
+        do {
+            let dtos: [ParameterDTO] = try await memoryCache.get(path)
+            return dtos.models
+        } catch {
+            let dtos: [ParameterDTO] = try await apiClient.request(.init(path: path))
+            await memoryCache.set(path, dtos)
+            return dtos.models
         }
-        let dtos: [ParameterDTO] = try await apiClient.request(.init(path: path))
-        memoryCache.set(path, dtos)
-        return dtos.map { $0.model }.sorted { $0.name < $1.name }
     }
 }
 
+private extension [ParameterDTO] {
+    var models: [Parameter] {
+        map { $0.model }.sorted { $0.name < $1.name }
+    }
+}

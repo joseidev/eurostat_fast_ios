@@ -15,12 +15,20 @@ public struct DefaultMetadataRepository: MetadataRepository {
     }
     
     public func requestMetadata() async throws -> [Metadata] {
-        if let dtos: [MetadataDTO] = memoryCache.get(path) {
-            return dtos.map { $0.model }.sorted { $0.name < $1.name }
+        do {
+            let dtos: [MetadataDTO] = try await memoryCache.get(path)
+            return dtos.models
+        } catch {
+            let dtos: [MetadataDTO] = try await apiClient.request(.init(path: path))
+            await memoryCache.set(path, dtos)
+            return dtos.models
         }
-        let dtos: [MetadataDTO] = try await apiClient.request(.init(path: path))
-        memoryCache.set(path, dtos)
-        return dtos.map { $0.model }.sorted { $0.name < $1.name }
+    }
+}
+
+private extension [MetadataDTO] {
+    var models: [Metadata] {
+        map { $0.model }.sorted { $0.name < $1.name }
     }
 }
 

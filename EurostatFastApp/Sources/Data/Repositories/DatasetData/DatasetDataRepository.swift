@@ -16,13 +16,15 @@ public struct DefaultDatasetDataRepository: DatasetDataRepository {
     
     public func requestDatasetData(_ code: String, _ geoValues: [String]) async throws -> DatasetData {
         let memoryCacheKey = DataHelpers.buildMemoryCacheKey(path, code, geoValues)
-        if let dto: DatasetDataDTO = memoryCache.get(memoryCacheKey) {
+        do {
+            let dto: DatasetDataDTO = try await memoryCache.get(memoryCacheKey)
+            return dto.model
+        } catch {
+            let path = path + "\(code)"
+            let endpoint = Endpoint(path: path, queryItems: geoValues.geoQueryItems)
+            let dto: DatasetDataDTO = try await apiClient.request(endpoint)
+            await memoryCache.set(memoryCacheKey, dto)
             return dto.model
         }
-        let path = path + "\(code)"
-        let endpoint = Endpoint(path: path, queryItems: geoValues.geoQueryItems)
-        let dto: DatasetDataDTO = try await apiClient.request(endpoint)
-        memoryCache.set(memoryCacheKey, dto)
-        return dto.model
     }
 }

@@ -1,7 +1,7 @@
 import Domain
 import Foundation
 
-public struct DatasetDataDTO: Codable {
+public struct DatasetDataDTO: Codable, Sendable {
     let parameters: [String: String]
     let data: [Data]
     
@@ -11,7 +11,7 @@ public struct DatasetDataDTO: Codable {
 }
 
 public extension DatasetDataDTO {
-    struct Data: Codable {
+    struct Data: Codable, Sendable {
         let geo: String
         let values: [String: Double]
         

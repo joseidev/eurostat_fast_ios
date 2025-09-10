@@ -1,14 +1,25 @@
+import Domain
+import FactoryKit
 import SwiftUI
 
 @Observable
 final class MainDatasetViewModel {
+    @ObservationIgnored
+    @Injected(\.loadDataUseCase) var loadDataUseCase
+    @ObservationIgnored
+    @Injected(\.datasetDataRepository) var datasetDataRepository
     var state: State = .loading
 }
 
 // MARK: - View actions
 extension MainDatasetViewModel {
     func onAppear() async {
-//        state = .loaded([pageMock])
+        do {
+            let dataset = try await datasetDataRepository.requestDatasetData("TEINA021", ["ES"])
+            print(dataset)
+        } catch {
+            state = .empty
+        }
     }
     func didTapAddNewPage() {
         print("didTapAddNewPage")
@@ -37,3 +48,5 @@ let dataMock: [DatasetChartView.PresentationModel] = [
     .init(period: "2025-Q1", value: 1.6),
     .init(period: "2025-Q2", value: 1.5)
 ]
+
+

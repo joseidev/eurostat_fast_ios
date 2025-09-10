@@ -1,5 +1,5 @@
 ### Mostrar una página
-- Estado loading y llamar a metadata y parameters
+- Llamar a metadata y parameters
 - Llamar a data por cada código
 - Cargar datos
 

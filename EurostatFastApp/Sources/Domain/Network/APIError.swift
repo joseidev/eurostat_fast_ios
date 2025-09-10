@@ -6,4 +6,5 @@ public enum APIError: Error {
     case invalidResponse
     case decodingError(Error)
     case statusCode(Int)
+    case notFoundInCache
 }
