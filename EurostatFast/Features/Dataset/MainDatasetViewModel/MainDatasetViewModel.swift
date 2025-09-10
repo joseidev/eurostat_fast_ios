@@ -9,14 +9,18 @@ final class MainDatasetViewModel {
     @ObservationIgnored
     @Injected(\.datasetDataRepository) var datasetDataRepository
     var state: State = .loading
+    private var metadata: [Metadata] = []
+    private var parameters: [Parameter] = []
 }
 
 // MARK: - View actions
 extension MainDatasetViewModel {
     func onAppear() async {
         do {
-            let dataset = try await datasetDataRepository.requestDatasetData("TEINA021", ["ES"])
-            print(dataset)
+            let (metadata, parameters) = try await loadDataUseCase.load()
+            self.metadata = metadata
+            self.parameters = parameters
+            state = .loaded([pageMock])
         } catch {
             state = .empty
         }
