@@ -3,12 +3,15 @@ import UI
 
 struct MainDatasetView: View {
     @State var viewModel: MainDatasetViewModel = .init()
+    @State var isEditPageViewPresented: Bool = false
+    @State var isAddPageViewPresented: Bool = false
+    @State var selectedPageIndex = 0
     var body: some View {
         VStack {
             DatasetHeaderView(
-                editAction: viewModel.didTapEditPage,
-                addAction: viewModel.didTapAddNewPage,
-                deleteAction: viewModel.didTapDeletePage
+                editAction: { isEditPageViewPresented = true },
+                addAction: { isAddPageViewPresented = true },
+                deleteAction: { viewModel.didTapDeletePage(selectedPageIndex) }
             )
             .padding()
             switch viewModel.state {
@@ -17,9 +20,10 @@ struct MainDatasetView: View {
             case .empty:
                 EmptyStateView()
             case let .loaded(pages):
-                DataSetPageScrollView {
+                DataSetPageScrollView(selectedPageIndex: $selectedPageIndex) {
                     ForEach(pages, id: \.self) { page in
                         DatasetPageView(presentationModel: page)
+                            .tag(page.index)
                     }
                 }
             }
@@ -27,6 +31,12 @@ struct MainDatasetView: View {
         .background(Color.Background.default)
         .task {
             await viewModel.onAppear()
+        }
+        .sheet(isPresented: $isEditPageViewPresented) {
+            Text("Edit")
+        }
+        .sheet(isPresented: $isAddPageViewPresented) {
+            Text("New")
         }
     }
 }

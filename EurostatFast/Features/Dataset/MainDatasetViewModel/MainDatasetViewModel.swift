@@ -25,18 +25,17 @@ extension MainDatasetViewModel {
             state = .empty
         }
     }
-    func didTapAddNewPage() {
-        print("didTapAddNewPage")
-    }
-    func didTapEditPage() {
-        print("didTapEditPage")
-    }
-    func didTapDeletePage() {
-        print("didTapDeletePage")
+
+    func didTapDeletePage(_ selectedPageIndex: Int) {
+        print("didTapDeletePage", selectedPageIndex)
     }
 }
 
-let pageMock: DatasetPageView.PresentationModel = .init(name: "España", items: [.init(id: "01", name: "Nombre", datasetChartModels: dataMock)])
+let pageMock: DatasetPageView.PresentationModel = .init(
+    index: 0,
+    name: "España",
+    items: [.init(id: "01", name: "Nombre", datasetChartModels: dataMock)]
+)
 
 let dataMock: [DatasetChartView.PresentationModel] = [
     .init(period: "2022-Q3", value: 2.9),
