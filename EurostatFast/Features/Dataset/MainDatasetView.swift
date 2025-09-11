@@ -11,7 +11,7 @@ struct MainDatasetView: View {
             DatasetHeaderView(
                 editAction: { isEditPageViewPresented = true },
                 addAction: { isAddPageViewPresented = true },
-                deleteAction: { viewModel.didTapDeletePage(selectedPageIndex) }
+                deleteAction: { viewModel.onTapDeletePage(selectedPageIndex) }
             )
             .padding()
             switch viewModel.state {
@@ -40,7 +40,8 @@ struct MainDatasetView: View {
                 },
                 saveAction: {
                     
-                }
+                },
+                selectAction: viewModel.onSelectAction
             )
         }
         .fullScreenCover(isPresented: $isAddPageViewPresented) {
@@ -51,7 +52,8 @@ struct MainDatasetView: View {
                 },
                 saveAction: {
                     
-                }
+                },
+                selectAction: viewModel.onSelectAction
             )
         }
     }

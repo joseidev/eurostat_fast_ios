@@ -4,6 +4,7 @@ struct EditPageView: View {
     let isNewPage: Bool
     let closeAction: () -> Void
     let saveAction: () -> Void
+    let selectAction: (String) -> Void
     @State var selectedPageType: PageType = .geo
     
     var body: some View {
@@ -18,7 +19,7 @@ struct EditPageView: View {
                 PageTypeSelectorView(selectedPageType: $selectedPageType)
             }
             GeoSelectorView(selectedPageType: $selectedPageType)
-            DatasetListView(items: itemsMock)
+            DatasetListView(items: itemsMock, selectAction: selectAction)
             Spacer()
         }
         .padding()
@@ -105,10 +106,19 @@ struct ListItem: Identifiable {
 
 private struct DatasetListView: View {
     let items: [ListItem]
+    let selectAction: (String) -> Void
     
     var body: some View {
         List(items) { item in
-            Text(item.value)
+            HStack {
+                Text(item.value)
+                Spacer()
+            }
+            .frame(maxWidth: .infinity)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                selectAction(item.value)
+            }
         }
         .listStyle(.plain)
     }

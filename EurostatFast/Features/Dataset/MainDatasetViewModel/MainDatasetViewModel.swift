@@ -26,8 +26,12 @@ extension MainDatasetViewModel {
         }
     }
 
-    func didTapDeletePage(_ selectedPageIndex: Int) {
+    func onTapDeletePage(_ selectedPageIndex: Int) {
         print("didTapDeletePage", selectedPageIndex)
+    }
+    
+    func onSelectAction(_ id: String) {
+        print("_*", id)
     }
 }
 
