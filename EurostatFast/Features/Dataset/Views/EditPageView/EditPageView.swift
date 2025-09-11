@@ -5,6 +5,7 @@ struct EditPageView: View {
     let closeAction: () -> Void
     let saveAction: () -> Void
     let selectAction: (String) -> Void
+    @State private var selectedItem: SelectorView.PresentationModel.Item?
     @State var selectedPageType: PageType = .geo
     
     var body: some View {
@@ -18,15 +19,15 @@ struct EditPageView: View {
             if isNewPage {
                 PageTypeSelectorView(selectedPageType: $selectedPageType)
             }
-            GeoSelectorView(selectedPageType: $selectedPageType)
-            DatasetListView(items: itemsMock, selectAction: selectAction)
+            SelectorView(selectedPageType: $selectedItem)
+            Divider()
+            DatasetListView(presentationModel: .init(name: "Datesets", items: itemsMock), selectAction: selectAction)
+                .padding(.top, 16)
             Spacer()
         }
         .padding()
     }
 }
-
-
 
 private struct HeaderView: View {
     let isNewPage: Bool
@@ -46,7 +47,6 @@ private struct HeaderView: View {
                 saveAction()
             }
             .buttonStyle(.bordered)
-            
         }
     }
 }
@@ -69,16 +69,24 @@ enum PageType: String, CaseIterable, Identifiable {
     }
 }
 
-
-private struct GeoSelectorView: View {
-    @Binding var selectedPageType: PageType
+private struct SelectorView: View {
+    struct PresentationModel: Hashable {
+        struct Item: Identifiable, Hashable {
+            let id: String
+            let name: String
+        }
+        let name: String
+        let items: [Item]
+    }
+    let presentationModel: PresentationModel
+    @Binding var selectedItem: PresentationModel.Item
     var body: some View {
         HStack {
-            Text("Select Geo")
+            Text(presentationModel.name)
             Spacer()
-            Picker("", selection: $selectedPageType) {
-                ForEach(PageType.allCases) { type in
-                    Text(type.title).tag(type)
+            Picker("", selection: $selectedItem) {
+                ForEach(presentationModel.items) { item in
+                    Text(item.name).tag(item.id)
                 }
             }
             .pickerStyle(.menu)
@@ -99,37 +107,51 @@ private struct PageTypeSelectorView: View {
     }
 }
 
-struct ListItem: Identifiable {
-    let id: UUID
-    let value: String
-}
-
-private struct DatasetListView: View {
-    let items: [ListItem]
+struct DatasetListView: View {
+    struct PresentationModel {
+        struct Item: Identifiable, Hashable {
+            let id: String
+            let name: String
+            let isSelected: Bool
+        }
+        let name: String
+        let items: [Item]
+    }
+    let presentationModel: PresentationModel
     let selectAction: (String) -> Void
     
     var body: some View {
-        List(items) { item in
+        VStack {
             HStack {
-                Text(item.value)
+                Text(presentationModel.name)
+                    .fontWeight(.bold)
                 Spacer()
             }
-            .frame(maxWidth: .infinity)
-            .contentShape(Rectangle())
-            .onTapGesture {
-                selectAction(item.value)
+            List(presentationModel.items) { item in
+                HStack {
+                    Text(item.name)
+                    Spacer()
+                    if item.isSelected {
+                        Image(systemName: "checkmark")
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    selectAction(item.id)
+                }
             }
+            .listStyle(.plain)
         }
-        .listStyle(.plain)
     }
 }
 
-let itemsMock: [ListItem] =
+let itemsMock: [DatasetListView.PresentationModel.Item] =
     [
-        .init(id: UUID(), value: "Item 1"),
-        .init(id: UUID(), value: "Item 2"),
-        .init(id: UUID(), value: "Item 3"),
-        .init(id: UUID(), value: "Item 4"),
-        .init(id: UUID(), value: "Item 5"),
+        .init(id: UUID().uuidString, name: "Item 1", isSelected: false),
+        .init(id: UUID().uuidString, name: "Item 2", isSelected: true),
+        .init(id: UUID().uuidString, name: "Item 3", isSelected: false),
+        .init(id: UUID().uuidString, name: "Item 4", isSelected: true),
+        .init(id: UUID().uuidString, name: "Item 5", isSelected: false),
     ]
 
