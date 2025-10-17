@@ -8,7 +8,7 @@ public struct Metadata: Hashable, Identifiable {
     public let dataStart: String
     public let dataEnd: String
     public let fixedParams: [String: String]
-    let queryParams: QueryParams
+    public let queryParams: QueryParams
     
     public init(
         id: Int,

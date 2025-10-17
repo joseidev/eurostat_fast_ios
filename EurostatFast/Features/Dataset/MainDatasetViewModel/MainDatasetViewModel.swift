@@ -7,9 +7,14 @@ final class MainDatasetViewModel {
     @ObservationIgnored
     @Injected(\.loadDataUseCase) var loadDataUseCase
     @ObservationIgnored
-    @Injected(\.datasetDataRepository) var datasetDataRepository
+    @Injected(\.datasetDataRepository) var datasetDataRepository    
+    @ObservationIgnored
+    var metadata: [Metadata] = []
+    @ObservationIgnored
+    lazy var geoParameter: Parameter? = {
+        parameters.first(where: { $0.code == "geo" })
+    }()
     var state: State = .loading
-    private var metadata: [Metadata] = []
     private var parameters: [Parameter] = []
 }
 

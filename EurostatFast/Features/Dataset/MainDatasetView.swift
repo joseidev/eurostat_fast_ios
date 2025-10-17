@@ -4,7 +4,7 @@ import UI
 struct MainDatasetView: View {
     @State var viewModel: MainDatasetViewModel = .init()
     @State var isEditPageViewPresented: Bool = false
-    @State var isAddPageViewPresented: Bool = true
+    @State var isAddPageViewPresented: Bool = false
     @State var selectedPageIndex = 0
     var body: some View {
         VStack {
@@ -35,6 +35,8 @@ struct MainDatasetView: View {
         .fullScreenCover(isPresented: $isEditPageViewPresented) {
             EditPageView(viewModel: .init(
                 isNewPage: false,
+                metadata: viewModel.metadata,
+                geoParameter: viewModel.geoParameter,
                 onClose: {
                     isEditPageViewPresented = false
                 }
@@ -43,6 +45,8 @@ struct MainDatasetView: View {
         .fullScreenCover(isPresented: $isAddPageViewPresented) {
             EditPageView(viewModel: .init(
                 isNewPage: true,
+                metadata: viewModel.metadata,
+                geoParameter: viewModel.geoParameter,
                 onClose: {
                     isAddPageViewPresented = false
                 }

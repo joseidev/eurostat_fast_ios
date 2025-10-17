@@ -1,13 +1,23 @@
+import Domain
 import SwiftUI
 
 @Observable
 final class EditPageViewModel {
     let isNewPage: Bool
+    let metadata: [Metadata]
+    let geoParameter: Parameter?
     let onClose: () -> Void
-    var presentationModel: PresentationModel = .initial
+    var presentationModel: EditPageView.PresentationModel = .initial
     
-    init(isNewPage: Bool, onClose: @escaping () -> Void) {
+    init(
+        isNewPage: Bool,
+        metadata: [Metadata],
+        geoParameter: Parameter?,
+        onClose: @escaping () -> Void
+    ) {
         self.isNewPage = isNewPage
+        self.metadata = metadata
+        self.geoParameter = geoParameter
         self.onClose = onClose
     }
 }
@@ -16,13 +26,7 @@ final class EditPageViewModel {
 
 extension EditPageViewModel {
     func onAppear() {
-        presentationModel = .init(
-            primaryItemName: "Geo items",
-            selectedPageType: .geo,
-            selectedPrimaryItem: .init(id: "2", name: "Spain"),
-            primarySelectorItems: aaMock,
-            datasetListItems: itemsMock
-        )
+        loadData()
     }
     
     func onTapClose() {
@@ -37,48 +41,94 @@ extension EditPageViewModel {
         presentationModel.updateDatasetListItem(id)
     }
     
+    // TODO: Añadir método para detectar selección de selector primario y
+    // limpiar seleccion de datasets ya que puede cambiar los que estén disponibles
+    
     func onSelectPageType(_ pageType: PageType) {
-        // Update presentation model
-    }
-}
-
-extension EditPageViewModel {
-    struct PresentationModel {
-        var primaryItemName: String
-        var selectedPageType: PageType
-        var selectedPrimaryItem: EditPageSelectorView.Item
-        var primarySelectorItems: [EditPageSelectorView.Item]
-        var datasetListItems: [DatasetListView.Item]
-        
-        static let initial: Self = .init(
-            primaryItemName: "",
-            selectedPageType: .geo,
-            selectedPrimaryItem: .init(id: "", name: ""),
-            primarySelectorItems: [],
-            datasetListItems: []
-        )
-        
-        mutating func updateDatasetListItem(_ id: String) {
-            guard let index = datasetListItems.firstIndex(where: {$0.id == id}) else {
+        switch pageType {
+        case .geo:
+            guard
+                let geoParameter,
+                let presentationModel = buildGeoPresentationModel(metadata, geoParameter) else {
                 return
             }
-            datasetListItems[index].isSelected.toggle()
+            self.presentationModel = presentationModel
+        case .dataset:
+            guard
+                let selectedDataset = metadata.first,
+                let presentationModel = buildDatasetPresentationModel(metadata, selectedDataset) else {
+                return
+            }
+            self.presentationModel = presentationModel
+
         }
+        
     }
 }
 
-let aaMock: [EditPageSelectorView.Item] = [
-    .init(id: "1", name: "EU"),
-    .init(id: "2", name: "Spain"),
-    .init(id: "3", name: "Italy"),
-]
-
-
-let itemsMock: [DatasetListView.Item] =
-    [
-        .init(id: UUID().uuidString, name: "Dataset 1", isSelected: false),
-        .init(id: UUID().uuidString, name: "Dataset 2", isSelected: true),
-        .init(id: UUID().uuidString, name: "Dataset 3", isSelected: false),
-        .init(id: UUID().uuidString, name: "Dataset 4", isSelected: true),
-        .init(id: UUID().uuidString, name: "Dataset 5", isSelected: false),
-    ]
+private extension EditPageViewModel {
+    typealias SelectorModels = (primarySelectorItems: [EditPageSelectorView.Item], datasetListItems: [DatasetListView.Item])
+    enum Constants {
+        static let geoLabel = String(localized: "Geo items")
+        static let datasetLabel = String(localized: "Dataset items")
+    }
+    func loadData() {
+        guard
+            let geoParameter,
+            let model = buildGeoPresentationModel(metadata, geoParameter) else {
+            return
+        }
+        presentationModel = model
+    }
+    
+    func buildGeoModels(_ metadata: [Metadata], _ geoParameter: Parameter) -> SelectorModels {
+        let primarySelectorItems: [EditPageSelectorView.Item] = geoParameter.values.map {
+            .init(id: $0.code, name: $0.description)
+        }
+        // TODO: Hay que pasar también geo item seleccionado por si no todos los datasets están disponibles para
+        // todos los geos.
+        // Seleccionar solo los datasets disponibles
+        let datasetListItems: [DatasetListView.Item] = metadata.map {
+            .init(id: $0.code, name: $0.name, isSelected: false)
+        }
+        return (primarySelectorItems, datasetListItems)
+    }
+    
+    func buildGeoPresentationModel(_ metadata: [Metadata], _ geoParameter: Parameter) -> EditPageView.PresentationModel? {
+        let (primarySelectorItems, datasetListItems) = buildGeoModels(metadata, geoParameter)
+        guard let selectedGeoItem = primarySelectorItems.first else {
+            return nil
+        }
+        return .init(
+            primaryItemName: Constants.geoLabel,
+            selectedPageType: .geo,
+            selectedPrimaryItem: selectedGeoItem,
+            primarySelectorItems: primarySelectorItems,
+            datasetListItems: datasetListItems
+        )
+    }
+    
+    func buildDatasetModels(_ metadata: [Metadata], _ selectedDataset: Metadata) -> SelectorModels {
+        let primarySelectorItems: [EditPageSelectorView.Item] = metadata.map {
+            .init(id: $0.code, name: $0.name)
+        }
+        let datasetListItems: [DatasetListView.Item] = selectedDataset.queryParams.geo.map {
+            .init(id: $0, name: $0, isSelected: false)
+        }
+        return (primarySelectorItems, datasetListItems)
+    }
+    
+    func buildDatasetPresentationModel(_ metadata: [Metadata], _ selectedDataset: Metadata) -> EditPageView.PresentationModel? {
+        let (primarySelectorItems, datasetListItems) = buildDatasetModels(metadata, selectedDataset)
+        guard let selectedDatasetItem = primarySelectorItems.first else {
+            return nil
+        }
+        return .init(
+            primaryItemName: Constants.datasetLabel,
+            selectedPageType: .dataset,
+            selectedPrimaryItem: selectedDatasetItem,
+            primarySelectorItems: primarySelectorItems,
+            datasetListItems: datasetListItems
+        )
+    }
+}
