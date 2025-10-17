@@ -4,7 +4,7 @@ import UI
 struct MainDatasetView: View {
     @State var viewModel: MainDatasetViewModel = .init()
     @State var isEditPageViewPresented: Bool = false
-    @State var isAddPageViewPresented: Bool = false
+    @State var isAddPageViewPresented: Bool = true
     @State var selectedPageIndex = 0
     var body: some View {
         VStack {
@@ -33,28 +33,20 @@ struct MainDatasetView: View {
             await viewModel.onAppear()
         }
         .fullScreenCover(isPresented: $isEditPageViewPresented) {
-            EditPageView(
+            EditPageView(viewModel: .init(
                 isNewPage: false,
-                closeAction: {
+                onClose: {
                     isEditPageViewPresented = false
-                },
-                saveAction: {
-                    
-                },
-                selectAction: viewModel.onSelectAction
-            )
+                }
+            ))
         }
         .fullScreenCover(isPresented: $isAddPageViewPresented) {
-            EditPageView(
+            EditPageView(viewModel: .init(
                 isNewPage: true,
-                closeAction: {
+                onClose: {
                     isAddPageViewPresented = false
-                },
-                saveAction: {
-                    
-                },
-                selectAction: viewModel.onSelectAction
-            )
+                }
+            ))
         }
     }
 }

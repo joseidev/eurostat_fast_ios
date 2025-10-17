@@ -1,31 +1,39 @@
 import SwiftUI
 
 struct EditPageView: View {
-    let isNewPage: Bool
-    let closeAction: () -> Void
-    let saveAction: () -> Void
-    let selectAction: (String) -> Void
-    @State private var selectedItem: SelectorView.PresentationModel.Item?
-    @State var selectedPageType: PageType = .geo
-    
+    @State var viewModel: EditPageViewModel
+
     var body: some View {
-        VStack {
+        VStack(spacing: 16) {
             HeaderView(
-                isNewPage: isNewPage,
-                closeAction: closeAction,
-                saveAction: saveAction
+                isNewPage: viewModel.isNewPage,
+                closeAction: viewModel.onTapClose,
+                saveAction: viewModel.onTapSave
             )
             .padding(.bottom, 16)
-            if isNewPage {
-                PageTypeSelectorView(selectedPageType: $selectedPageType)
+            if viewModel.isNewPage {
+                PageTypeSelectorView(selectedPageType: $viewModel.presentationModel.selectedPageType)
             }
-            SelectorView(selectedPageType: $selectedItem)
+            EditPageSelectorView(
+                name: viewModel.presentationModel.primaryItemName,
+                items: viewModel.presentationModel.primarySelectorItems,
+                selectedItem: $viewModel.presentationModel.selectedPrimaryItem
+            )
             Divider()
-            DatasetListView(presentationModel: .init(name: "Datesets", items: itemsMock), selectAction: selectAction)
-                .padding(.top, 16)
+            DatasetListView(
+                items: viewModel.presentationModel.datasetListItems,
+                selectAction: viewModel.onSelectListItem
+            )
+            .padding(.top, 16)
             Spacer()
         }
         .padding()
+        .onChange(of: viewModel.presentationModel.selectedPageType) { _ , new in
+            viewModel.onSelectPageType(new)
+        }
+        .onAppear {
+            viewModel.onAppear()
+        }
     }
 }
 
@@ -43,7 +51,7 @@ private struct HeaderView: View {
             Spacer()
             Text(title)
             Spacer()
-            Button(isNewPage ? "Add" : "Save") {
+            Button(isNewPage ? String(localized: "Add") : String(localized: "Save")) {
                 saveAction()
             }
             .buttonStyle(.bordered)
@@ -57,39 +65,25 @@ private extension HeaderView {
     }
 }
 
-enum PageType: String, CaseIterable, Identifiable {
-    case geo, dataset
-    
-    var title: String {
-        .init(self == .geo ? "Geo" : "Dataset")
-    }
-    
-    var id: String {
-        self.rawValue
-    }
-}
 
-private struct SelectorView: View {
-    struct PresentationModel: Hashable {
-        struct Item: Identifiable, Hashable {
-            let id: String
-            let name: String
-        }
+
+struct EditPageSelectorView: View {
+    struct Item: Identifiable, Hashable {
+        let id: String
         let name: String
-        let items: [Item]
     }
-    let presentationModel: PresentationModel
-    @Binding var selectedItem: PresentationModel.Item
+    let name: String
+    let items: [Item]
+    @Binding var selectedItem: Item
     var body: some View {
         HStack {
-            Text(presentationModel.name)
+            Text(name)
             Spacer()
             Picker("", selection: $selectedItem) {
-                ForEach(presentationModel.items) { item in
-                    Text(item.name).tag(item.id)
+                ForEach(items, id: \.self) { item in
+                    Text(item.name).tag(item)
                 }
             }
-            .pickerStyle(.menu)
         }
     }
 }
@@ -108,26 +102,22 @@ private struct PageTypeSelectorView: View {
 }
 
 struct DatasetListView: View {
-    struct PresentationModel {
-        struct Item: Identifiable, Hashable {
-            let id: String
-            let name: String
-            let isSelected: Bool
-        }
+    struct Item: Identifiable, Hashable {
+        let id: String
         let name: String
-        let items: [Item]
+        var isSelected: Bool
     }
-    let presentationModel: PresentationModel
+    let items: [Item]
     let selectAction: (String) -> Void
     
     var body: some View {
         VStack {
             HStack {
-                Text(presentationModel.name)
+                Text("Datasets")
                     .fontWeight(.bold)
                 Spacer()
             }
-            List(presentationModel.items) { item in
+            List(items) { item in
                 HStack {
                     Text(item.name)
                     Spacer()
@@ -145,13 +135,3 @@ struct DatasetListView: View {
         }
     }
 }
-
-let itemsMock: [DatasetListView.PresentationModel.Item] =
-    [
-        .init(id: UUID().uuidString, name: "Item 1", isSelected: false),
-        .init(id: UUID().uuidString, name: "Item 2", isSelected: true),
-        .init(id: UUID().uuidString, name: "Item 3", isSelected: false),
-        .init(id: UUID().uuidString, name: "Item 4", isSelected: true),
-        .init(id: UUID().uuidString, name: "Item 5", isSelected: false),
-    ]
-
