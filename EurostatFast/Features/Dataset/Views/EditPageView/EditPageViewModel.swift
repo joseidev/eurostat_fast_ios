@@ -7,18 +7,21 @@ final class EditPageViewModel {
     let metadata: [Metadata]
     let geoParameter: Parameter?
     let onClose: () -> Void
+    let onSave: (SavedModel) -> Void
     var presentationModel: EditPageView.PresentationModel = .initial
     
     init(
         isNewPage: Bool,
         metadata: [Metadata],
         geoParameter: Parameter?,
-        onClose: @escaping () -> Void
+        onClose: @escaping () -> Void,
+        onSave: @escaping (SavedModel) -> Void
     ) {
         self.isNewPage = isNewPage
         self.metadata = metadata
         self.geoParameter = geoParameter
         self.onClose = onClose
+        self.onSave = onSave
     }
 }
 
@@ -34,7 +37,10 @@ extension EditPageViewModel {
     }
     
     func onTapSave() {
-        // Create new Page model based on selection
+        guard let model = presentationModel.buildGeoPageModel() else {
+            return
+        }
+        onSave(.geo(model))
     }
     
     func onSelectListItem(_ id: String) {
@@ -130,5 +136,11 @@ private extension EditPageViewModel {
             primarySelectorItems: primarySelectorItems,
             datasetListItems: datasetListItems
         )
+    }
+}
+
+extension EditPageViewModel {
+    enum SavedModel {
+        case geo(GeoPageModel)
     }
 }

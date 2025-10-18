@@ -1,3 +1,4 @@
+import Domain
 
 extension EditPageView {
     struct PresentationModel {
@@ -20,6 +21,17 @@ extension EditPageView {
                 return
             }
             datasetListItems[index].isSelected.toggle()
+        }
+        
+        func buildGeoPageModel() -> GeoPageModel? {
+            guard selectedPageType == .geo else {
+                return nil
+            }
+            return GeoPageModel(
+                name: selectedPrimaryItem.name,
+                geoCode: selectedPrimaryItem.id,
+                datasetCodes: datasetListItems.filter { $0.isSelected }.map { $0.id }
+            )
         }
     }
 }

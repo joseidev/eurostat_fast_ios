@@ -39,7 +39,8 @@ struct MainDatasetView: View {
                 geoParameter: viewModel.geoParameter,
                 onClose: {
                     isEditPageViewPresented = false
-                }
+                },
+                onSave: { _ in }
             ))
         }
         .fullScreenCover(isPresented: $isAddPageViewPresented) {
@@ -48,6 +49,10 @@ struct MainDatasetView: View {
                 metadata: viewModel.metadata,
                 geoParameter: viewModel.geoParameter,
                 onClose: {
+                    isAddPageViewPresented = false
+                },
+                onSave: { savedModel in
+                    viewModel.onSavePage(savedModel)
                     isAddPageViewPresented = false
                 }
             ))

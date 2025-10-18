@@ -7,7 +7,7 @@ final class MainDatasetViewModel {
     @ObservationIgnored
     @Injected(\.loadDataUseCase) var loadDataUseCase
     @ObservationIgnored
-    @Injected(\.datasetDataRepository) var datasetDataRepository    
+    @Injected(\.datasetDataRepository) var datasetDataRepository
     @ObservationIgnored
     var metadata: [Metadata] = []
     @ObservationIgnored
@@ -33,6 +33,13 @@ extension MainDatasetViewModel {
 
     func onTapDeletePage(_ selectedPageIndex: Int) {
         print("didTapDeletePage", selectedPageIndex)
+    }
+
+    func onSavePage(_ savedModel: EditPageViewModel.SavedModel) {
+        switch savedModel {
+        case let .geo(geoPageModel):
+            print("didSavePage", geoPageModel)        
+        }
     }
 }
 
