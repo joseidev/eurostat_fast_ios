@@ -26,14 +26,18 @@ private extension PageBuilderUseCase {
         .init(
             index: 0,
             name: geoParameter.getName(model.geoCode),
-            items: try await getItems(model.datasetCodes, model.geoCode)
+            items: try await getItems(model.datasetCodes, model.geoCode, metadata)
         )
     }
     
-    func getItems(_ datasetCodes: [String], _ geoCode: String) async throws -> [DatasetItemView.PresentationModel] {
+    func getItems(
+        _ datasetCodes: [String],
+        _ geoCode: String,
+        _ metadata: [Metadata],
+    ) async throws -> [DatasetItemView.PresentationModel] {
         var models: [DatasetItemView.PresentationModel] = []
         for datasetCode in datasetCodes {
-            let model = try await getDatasetModel(datasetCode, "Name", geoCode)
+            let model = try await getDatasetModel(datasetCode, metadata.getName(datasetCode), geoCode)
             models.append(model)
         }
         return models
@@ -46,6 +50,12 @@ private extension PageBuilderUseCase {
         }
         let datasetChartModels = values.getDatasetChartViewItems().sorted(by: {$0.period < $1.period})
         return .init(id: UUID().uuidString, name: name, datasetChartModels: datasetChartModels)
+    }
+}
+
+private extension [Metadata] {
+    func getName(_ datasetCode: String) -> String {
+        first(where: {$0.code == datasetCode})?.name ?? ""
     }
 }
 
