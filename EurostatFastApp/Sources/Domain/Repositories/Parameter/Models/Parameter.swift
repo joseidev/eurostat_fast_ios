@@ -29,3 +29,10 @@ public extension Parameter {
         }
     }
 }
+
+
+public extension [Parameter] {
+    var geoParameter: Parameter? {
+        self.first(where: { $0.code == "geo" })
+    }
+}

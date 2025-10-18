@@ -23,15 +23,15 @@ extension EditPageView {
             datasetListItems[index].isSelected.toggle()
         }
         
-        func buildGeoPageModel() -> GeoPageModel? {
+        var geoModel: EditPageViewModel.SavedModel? {
             guard selectedPageType == .geo else {
                 return nil
             }
-            return GeoPageModel(
-                name: selectedPrimaryItem.name,
+            let model = EditPageViewModel.SavedModel.Geo(
                 geoCode: selectedPrimaryItem.id,
                 datasetCodes: datasetListItems.filter { $0.isSelected }.map { $0.id }
             )
+            return .geo(model)
         }
     }
 }

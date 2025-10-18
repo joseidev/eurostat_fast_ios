@@ -37,10 +37,10 @@ extension EditPageViewModel {
     }
     
     func onTapSave() {
-        guard let model = presentationModel.buildGeoPageModel() else {
+        guard let model = presentationModel.geoModel else {
             return
         }
-        onSave(.geo(model))
+        onSave(model)
     }
     
     func onSelectListItem(_ id: String) {
@@ -141,6 +141,15 @@ private extension EditPageViewModel {
 
 extension EditPageViewModel {
     enum SavedModel {
-        case geo(GeoPageModel)
+        struct Geo{
+            let geoCode: String
+            let datasetCodes: [String]
+            
+            init(geoCode: String, datasetCodes: [String]) {
+                self.geoCode = geoCode
+                self.datasetCodes = datasetCodes
+            }
+        }
+        case geo(Geo)
     }
 }

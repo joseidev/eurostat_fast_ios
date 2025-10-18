@@ -11,9 +11,7 @@ final class MainDatasetViewModel {
     @ObservationIgnored
     var metadata: [Metadata] = []
     @ObservationIgnored
-    lazy var geoParameter: Parameter? = {
-        parameters.first(where: { $0.code == "geo" })
-    }()
+    lazy var geoParameter: Parameter? = parameters.geoParameter
     var state: State = .loading
     private var parameters: [Parameter] = []
 }
@@ -38,7 +36,7 @@ extension MainDatasetViewModel {
     func onSavePage(_ savedModel: EditPageViewModel.SavedModel) {
         switch savedModel {
         case let .geo(geoPageModel):
-            print("didSavePage", geoPageModel)        
+            print("didSavePage", geoPageModel)
         }
     }
 }
