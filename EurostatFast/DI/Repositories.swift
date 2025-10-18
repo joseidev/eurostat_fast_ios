@@ -32,4 +32,8 @@ extension Container {
             memoryCache: self.memoryCache()
         )}
     }
+    
+    var pageBuilderUseCase: Factory<PageBuilderUseCase> {
+        self { @MainActor in PageBuilderUseCase()}
+    }
 }

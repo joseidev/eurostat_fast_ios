@@ -9,6 +9,8 @@ final class MainDatasetViewModel {
     @ObservationIgnored
     @Injected(\.datasetDataRepository) var datasetDataRepository
     @ObservationIgnored
+    @Injected(\.pageBuilderUseCase) var pageBuilderUseCase
+    @ObservationIgnored
     var metadata: [Metadata] = []
     @ObservationIgnored
     lazy var geoParameter: Parameter? = parameters.geoParameter
@@ -34,10 +36,13 @@ extension MainDatasetViewModel {
     }
 
     func onSavePage(_ savedModel: EditPageViewModel.SavedModel) {
-        switch savedModel {
-        case let .geo(geoPageModel):
-            print("didSavePage", geoPageModel)
-        }
+        guard let geoParameter else { return }
+        let model = pageBuilderUseCase.build(
+            savedModel,
+            metadata,
+            geoParameter
+        )
+        state = .loaded([model])
     }
 }
 
