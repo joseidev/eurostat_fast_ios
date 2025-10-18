@@ -52,8 +52,11 @@ struct MainDatasetView: View {
                     isAddPageViewPresented = false
                 },
                 onSave: { savedModel in
-                    viewModel.onSavePage(savedModel)
                     isAddPageViewPresented = false
+                    Task {
+                        // TODO: Handle task
+                        await viewModel.onSavePage(savedModel)
+                    }
                 }
             ))
         }

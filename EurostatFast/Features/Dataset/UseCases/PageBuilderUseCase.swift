@@ -1,14 +1,18 @@
 import Domain
+import FactoryKit
+import Foundation
 
 struct PageBuilderUseCase {
+    @Injected(\.datasetDataRepository) var datasetDataRepository
+    
     func build(
         _ model: EditPageViewModel.SavedModel,
         _ metadata: [Metadata],
         _ geoParameter: Parameter
-    ) -> DatasetPageView.PresentationModel {
+    ) async throws -> DatasetPageView.PresentationModel {
         switch model {
         case let .geo(geoModel):
-            buildGeo(geoModel, metadata, geoParameter)
+            try await buildGeo(geoModel, metadata, geoParameter)
         }
     }
 }
@@ -18,28 +22,43 @@ private extension PageBuilderUseCase {
         _ model: EditPageViewModel.SavedModel.Geo,
         _ metadata: [Metadata],
         _ geoParameter: Parameter
-    ) -> DatasetPageView.PresentationModel {
-        pageMock2
+    ) async throws -> DatasetPageView.PresentationModel {
+        .init(
+            index: 0,
+            name: geoParameter.getName(model.geoCode),
+            items: try await getItems(model.datasetCodes, model.geoCode)
+        )
+    }
+    
+    func getItems(_ datasetCodes: [String], _ geoCode: String) async throws -> [DatasetItemView.PresentationModel] {
+        var models: [DatasetItemView.PresentationModel] = []
+        for datasetCode in datasetCodes {
+            let model = try await getDatasetModel(datasetCode, "Name", geoCode)
+            models.append(model)
+        }
+        return models
+    }
+    
+    func getDatasetModel(_ datasetCode: String, _ name: String, _ geoCode: String) async throws -> DatasetItemView.PresentationModel {
+        let values = try await datasetDataRepository.requestDatasetData(datasetCode, [geoCode])
+        guard let values = values.data.first(where: {$0.geo == geoCode})?.values else {
+            throw AppError.dataNotFound
+        }
+        let datasetChartModels = values.getDatasetChartViewItems().sorted(by: {$0.period < $1.period})
+        return .init(id: UUID().uuidString, name: name, datasetChartModels: datasetChartModels)
     }
 }
 
-private let pageMock2: DatasetPageView.PresentationModel = .init(
-    index: 0,
-    name: "Use case",
-    items: [.init(id: "01", name: "Nombre2", datasetChartModels: dataMock)]
-)
 
-private let dataMock2: [DatasetChartView.PresentationModel] = [
-    .init(period: "2022-Q3", value: 2.9),
-    .init(period: "2022-Q4", value: 2.1),
-    .init(period: "2023-Q1", value: 1.3),
-    .init(period: "2023-Q2", value: 0.6),
-    .init(period: "2023-Q3", value: 0.1),
-    .init(period: "2023-Q4", value: 0.2),
-    .init(period: "2024-Q1", value: 0.5),
-    .init(period: "2024-Q2", value: 0.5),
-    .init(period: "2024-Q3", value: 0.9),
-    .init(period: "2024-Q4", value: 1.3),
-    .init(period: "2025-Q1", value: 1.6),
-    .init(period: "2025-Q2", value: 1.5)
-]
+private extension Parameter {
+    func getName(_ geoCode: String) -> String {
+        values.first(where: {$0.code == geoCode})?.description ?? ""
+    }
+}
+
+private extension [String: Double] {
+    /// Returns model for chart from dataset values
+    func getDatasetChartViewItems() -> [DatasetChartView.PresentationModel] {
+        map {DatasetChartView.PresentationModel(period: $0.key, value: $0.value)}
+    }
+}

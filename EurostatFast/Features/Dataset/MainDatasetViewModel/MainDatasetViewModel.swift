@@ -35,14 +35,18 @@ extension MainDatasetViewModel {
         print("didTapDeletePage", selectedPageIndex)
     }
 
-    func onSavePage(_ savedModel: EditPageViewModel.SavedModel) {
+    func onSavePage(_ savedModel: EditPageViewModel.SavedModel) async {
         guard let geoParameter else { return }
-        let model = pageBuilderUseCase.build(
-            savedModel,
-            metadata,
-            geoParameter
-        )
-        state = .loaded([model])
+        do {
+            let model = try await pageBuilderUseCase.build(
+                savedModel,
+                metadata,
+                geoParameter
+            )
+            state = .loaded([model])
+        } catch {
+            
+        }
     }
 }
 
