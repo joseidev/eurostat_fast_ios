@@ -19,6 +19,11 @@ extension Container {
         }.singleton
     }
     
+    @MainActor
+    private var modelContext: ModelContext {
+        persitenceDataStore().container.mainContext
+    }
+    
     var memoryCache: Factory<MemoryCache> {
         self { DefaultMemoryCache() }.singleton
     }
@@ -26,7 +31,7 @@ extension Container {
     var metadataRepository: Factory<MetadataRepository> {
         self { @MainActor in DefaultMetadataRepository(
             apiClient: self.apliClient(),
-            memoryCache: self.memoryCache()
+            modelContext: self.modelContext
         ) }
     }
     
@@ -46,7 +51,7 @@ extension Container {
     
     var datasetPageRepository: Factory<DatasetPageRepository> {
         self { @MainActor in DefaultDatasetPageRepository(
-            modelContext: self.persitenceDataStore().container.mainContext
+            modelContext: self.modelContext
         )}
     }
 }

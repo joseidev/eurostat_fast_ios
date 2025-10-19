@@ -1,4 +1,5 @@
-public protocol DatasetPageRepository {
+
+public protocol DatasetPageRepository: Sendable {
     func store(_ datasetPage: DatasetPage) throws
     func getLastPageIndex() throws -> Int?
     func update(

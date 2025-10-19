@@ -2,7 +2,7 @@ import SwiftData
 import Foundation
 import Domain
 
-public struct DefaultDatasetPageRepository {
+public struct DefaultDatasetPageRepository: @unchecked Sendable  {
     private let modelContext: ModelContext
     
     public init(modelContext: ModelContext) {

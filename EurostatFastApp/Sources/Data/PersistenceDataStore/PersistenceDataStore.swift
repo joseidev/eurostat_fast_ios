@@ -9,7 +9,7 @@ public struct DefaultPersistenceDataStore: PersistenceDataStore {
     }
     
     public static func makeDefault() throws -> PersistenceDataStore {
-        let container = try ModelContainer(for: DatasetPage.self)
+        let container = try ModelContainer(for: DatasetPage.self, Metadata.self)
         return DefaultPersistenceDataStore(container: container)
     }
 }
