@@ -1,6 +1,6 @@
 public protocol DatasetPageRepository {
     func store(_ datasetPage: DatasetPage) throws
-    func getLastPageIndex() throws -> Int
+    func getLastPageIndex() throws -> Int?
     func update(
         id: String,
         pageIndex: Int,

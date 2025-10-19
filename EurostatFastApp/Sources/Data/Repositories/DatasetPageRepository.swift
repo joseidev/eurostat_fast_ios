@@ -16,13 +16,13 @@ extension DefaultDatasetPageRepository: DatasetPageRepository {
         try modelContext.save()
     }
     
-    public func getLastPageIndex() throws -> Int {
+    public func getLastPageIndex() throws -> Int? {
         let datasetPages = FetchDescriptor<DatasetPage>(
             sortBy: [
                 .init(\.pageIndex)
             ]
         )
-        return try modelContext.fetch(datasetPages).last?.pageIndex ?? 0
+        return try modelContext.fetch(datasetPages).last?.pageIndex
     }
 
     public func update(

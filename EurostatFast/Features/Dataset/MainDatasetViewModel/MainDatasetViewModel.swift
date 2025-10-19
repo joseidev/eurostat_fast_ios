@@ -50,11 +50,12 @@ extension MainDatasetViewModel {
 private extension MainDatasetViewModel {
     func saveGeoModel(_ geoModel: EditPageViewModel.SavedModel.Geo) async {
         do {
-            let pageIndex = try datasetPageRepository.getLastPageIndex() + 1
+            let lastPageIndex = try datasetPageRepository.getLastPageIndex() ?? -1
+            let pageIndex = lastPageIndex + 1
             try datasetPageRepository.store(geoModel.buildNewDatasetPage(pageIndex))
             guard let geoParameter else { return }
             let model = try await pageBuilderUseCase.buildGeoModel(
-                0,
+                pageIndex,
                 geoModel,
                 metadata,
                 geoParameter
