@@ -3,7 +3,7 @@ import Foundation
 import Domain
 
 public struct DefaultDatasetPageRepository {
-    public let modelContext: ModelContext
+    private let modelContext: ModelContext
     
     public init(modelContext: ModelContext) {
         self.modelContext = modelContext

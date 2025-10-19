@@ -1,14 +1,16 @@
 import Foundation
+import SwiftData
 
-public struct Metadata: Hashable, Identifiable {
-    public let id: Int
-    public let code: String
-    public let eurostatLastUpdate: Date
-    public let name: String
-    public let dataStart: String
-    public let dataEnd: String
-    public let fixedParams: [String: String]
-    public let queryParams: QueryParams
+@Model
+public final class Metadata: Hashable, Identifiable {
+    public var id: Int
+    public var code: String
+    public var eurostatLastUpdate: Date
+    public var name: String
+    public var dataStart: String
+    public var dataEnd: String
+    public var fixedParams: [String: String]
+    public var queryParams: MetadataQueryParams
     
     public init(
         id: Int,
@@ -18,7 +20,7 @@ public struct Metadata: Hashable, Identifiable {
         dataStart: String,
         dataEnd: String,
         fixedParams: [String : String],
-        queryParams: QueryParams
+        queryParams: MetadataQueryParams
     ) {
         self.id = id
         self.code = code
@@ -31,12 +33,12 @@ public struct Metadata: Hashable, Identifiable {
     }
 }
 
-public extension Metadata {
-    struct QueryParams: Hashable {
-        public let geo: [String]
-        
-        public init(geo: [String]) {
-            self.geo = geo
-        }
+@Model
+public final class MetadataQueryParams: Hashable {
+    public var geo: [String]
+    
+    public init(geo: [String]) {
+        self.geo = geo
     }
 }
+

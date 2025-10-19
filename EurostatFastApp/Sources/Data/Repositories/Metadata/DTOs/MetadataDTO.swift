@@ -29,7 +29,7 @@ extension MetadataDTO {
     struct QueryParams: Codable, Sendable {
         let geo: [String]?
         
-        var model: Metadata.QueryParams {
+        var model: Domain.MetadataQueryParams {
             .init(geo: geo ?? [])
         }
     }
