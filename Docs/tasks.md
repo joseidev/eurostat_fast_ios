@@ -1,0 +1,4 @@
+- Guardar DTOs:
+    - Metadata
+    - Parameter
+    - DatasetData: El DTO no tiene el código del dataset

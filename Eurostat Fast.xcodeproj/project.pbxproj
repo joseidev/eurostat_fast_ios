@@ -13,6 +13,7 @@
 
 /* Begin PBXFileReference section */
 		762162B72E6C875600C452FA /* Eurostat Fast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Eurostat Fast.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		765CF2862EA528C700E87A75 /* tasks.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = tasks.md; sourceTree = "<group>"; };
 		76F95B5A2E6C8C5100E117F3 /* EurostatFastApp */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = EurostatFastApp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -40,6 +41,7 @@
 		762162AE2E6C875600C452FA = {
 			isa = PBXGroup;
 			children = (
+				765CF2852EA528C100E87A75 /* Docs */,
 				76F95B5A2E6C8C5100E117F3 /* EurostatFastApp */,
 				762162B92E6C875600C452FA /* EurostatFast */,
 				762162B82E6C875600C452FA /* Products */,
@@ -52,6 +54,14 @@
 				762162B72E6C875600C452FA /* Eurostat Fast.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		765CF2852EA528C100E87A75 /* Docs */ = {
+			isa = PBXGroup;
+			children = (
+				765CF2862EA528C700E87A75 /* tasks.md */,
+			);
+			path = Docs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
