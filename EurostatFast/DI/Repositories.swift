@@ -2,10 +2,21 @@ import Data
 import Domain
 import FactoryKit
 import Foundation
+import SwiftData
 
 extension Container {
     var apliClient: Factory<APIClient> {
         self { DefaultAPIClient() }
+    }
+    
+    var persitenceDataStore: Factory<PersistenceDataStore> {
+        self {
+            do {
+                return try DefaultPersistenceDataStore.makeDefault()
+            } catch {
+                fatalError("❌ Error al crear PersistenceDataStore: \(error)")
+            }
+        }.singleton
     }
     
     var memoryCache: Factory<MemoryCache> {
@@ -33,7 +44,9 @@ extension Container {
         )}
     }
     
-    var pageBuilderUseCase: Factory<PageBuilderUseCase> {
-        self { @MainActor in PageBuilderUseCase()}
+    var datasetPageRepository: Factory<DatasetPageRepository> {
+        self { @MainActor in DefaultDatasetPageRepository(
+            modelContext: self.persitenceDataStore().container.mainContext
+        )}
     }
 }

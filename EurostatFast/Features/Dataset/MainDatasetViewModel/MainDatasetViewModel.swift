@@ -13,12 +13,13 @@ final class MainDatasetViewModel {
     @ObservationIgnored
     @Injected(\.pageBuilderUseCase) var pageBuilderUseCase
     @ObservationIgnored
+    @Injected(\.datasetPageRepository) var datasetPageRepository
+    @ObservationIgnored
     var metadata: [Metadata] = []
     @ObservationIgnored
     lazy var geoParameter: Parameter? = parameters.geoParameter
     var state: State = .loading
     private var parameters: [Parameter] = []
-    private let context = container.mainContext
 }
 
 // MARK: - View actions
@@ -36,11 +37,9 @@ extension MainDatasetViewModel {
 
     func onTapDeletePage(_ selectedPageIndex: Int) {
         print("didTapDeletePage", selectedPageIndex)
-        printObjects()
-        
     }
 
-    func onSavePage(_ savedModel: EditPageViewModel.SavedModel) async {
+    func onSaveNewPage(_ savedModel: EditPageViewModel.SavedModel) async {
         switch savedModel {
             case let  .geo(geoModel):
                 await saveGeoModel(geoModel)
@@ -51,12 +50,11 @@ extension MainDatasetViewModel {
 private extension MainDatasetViewModel {
     func saveGeoModel(_ geoModel: EditPageViewModel.SavedModel.Geo) async {
         do {
-            let pageIndex = try getLastPageIndex() + 1
-            context.insert(geoModel.buildDatasetPage(pageIndex))
-            try context.save()
+            let pageIndex = try datasetPageRepository.getLastPageIndex() + 1
+            try datasetPageRepository.store(geoModel.buildNewDatasetPage(pageIndex))
             guard let geoParameter else { return }
             let model = try await pageBuilderUseCase.buildGeoModel(
-                pageIndex,
+                0,
                 geoModel,
                 metadata,
                 geoParameter
@@ -66,33 +64,14 @@ private extension MainDatasetViewModel {
             //TODO: Handle error
         }
     }
-    
-    func getLastPageIndex() throws -> Int {
-        let datasetPages = FetchDescriptor<DatasetPage>(
-            sortBy: [
-                .init(\.pageIndex)
-            ]
-        )
-        return try context.fetch(datasetPages).last?.pageIndex ?? 0
-    }
-    
-    func printObjects() {
-        let datasetPages = FetchDescriptor<DatasetPage>(
-            sortBy: [
-                .init(\.pageIndex)
-            ]
-        )
-        let results = try? context.fetch(datasetPages)
-        results?.forEach {
-            print($0.pageIndex)
-            print($0.geoCode)
-            print($0.datasetCodes)
-        }
-    }
 }
 
 extension EditPageViewModel.SavedModel.Geo {
-    func buildDatasetPage(_ index: Int) -> DatasetPage {
-        .Root(pageIndex: index, geoCode: self.geoCode, datasetCodes: self.datasetCodes)
+    func buildNewDatasetPage(_ index: Int) -> DatasetPage {
+        .init(
+            pageIndex: index,
+            geoCode: self.geoCode,
+            datasetCodes: self.datasetCodes
+        )
     }
 }
