@@ -1,35 +1,26 @@
 import Domain
 import FactoryKit
 import Foundation
+import SwiftData
 
 struct PageBuilderUseCase {
     @Injected(\.datasetDataRepository) var datasetDataRepository
     
-    func build(
-        _ model: EditPageViewModel.SavedModel,
-        _ metadata: [Metadata],
-        _ geoParameter: Parameter
-    ) async throws -> DatasetPageView.PresentationModel {
-        switch model {
-        case let .geo(geoModel):
-            try await buildGeo(geoModel, metadata, geoParameter)
-        }
-    }
-}
-
-private extension PageBuilderUseCase {
-    func buildGeo(
+    func buildGeoModel(
+        _ index: Int,
         _ model: EditPageViewModel.SavedModel.Geo,
         _ metadata: [Metadata],
         _ geoParameter: Parameter
     ) async throws -> DatasetPageView.PresentationModel {
         .init(
-            index: 0,
+            index: index,
             name: geoParameter.getName(model.geoCode),
             items: try await getItems(model.datasetCodes, model.geoCode, metadata)
         )
     }
-    
+}
+
+private extension PageBuilderUseCase {
     func getItems(
         _ datasetCodes: [String],
         _ geoCode: String,
