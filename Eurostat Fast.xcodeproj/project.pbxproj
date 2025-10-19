@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		76010A542EA58704007F1C04 /* docs.md in Resources */ = {isa = PBXBuildFile; fileRef = 76010A3E2EA58704007F1C04 /* docs.md */; };
 		76F958EE2E6C89A300E117F3 /* EurostatFastApp in Frameworks */ = {isa = PBXBuildFile; productRef = 76F958ED2E6C89A300E117F3 /* EurostatFastApp */; };
 		76F95B632E6CDE4000E117F3 /* FactoryKit in Frameworks */ = {isa = PBXBuildFile; productRef = 76F95B622E6CDE4000E117F3 /* FactoryKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		76010A3E2EA58704007F1C04 /* docs.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = docs.md; sourceTree = "<group>"; };
 		762162B72E6C875600C452FA /* Eurostat Fast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Eurostat Fast.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		765CF2862EA528C700E87A75 /* tasks.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = tasks.md; sourceTree = "<group>"; };
 		76F95B5A2E6C8C5100E117F3 /* EurostatFastApp */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = EurostatFastApp; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 			isa = PBXGroup;
 			children = (
 				765CF2862EA528C700E87A75 /* tasks.md */,
+				76010A3E2EA58704007F1C04 /* docs.md */,
 			);
 			path = Docs;
 			sourceTree = "<group>";
@@ -133,6 +136,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76010A542EA58704007F1C04 /* docs.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
