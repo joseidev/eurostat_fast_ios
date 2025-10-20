@@ -1,28 +1,55 @@
 import Domain
 import Foundation
+import SwiftData
 
-public struct DefaultParameterRepository: ParameterRepository {
+public struct DefaultParameterRepository: ParameterRepository, @unchecked Sendable {
     private let apiClient: APIClient
-    private let memoryCache: MemoryCache
+    private let modelContext: ModelContext
     private let path = "parameter"
     
     public init(
         apiClient: APIClient,
-        memoryCache: MemoryCache
+        modelContext: ModelContext
     ) {
         self.apiClient = apiClient
-        self.memoryCache = memoryCache
+        self.modelContext = modelContext
     }
     
     public func requestParameters() async throws -> [Parameter] {
         do {
-            let dtos: [ParameterDTO] = try await memoryCache.get(path)
-            return dtos.models
+            let parameters = try getStoredParameters()
+            guard !parameters.isEmpty else {
+                return try await apiRequestParameters()
+            }
+            return parameters
         } catch {
-            let dtos: [ParameterDTO] = try await apiClient.request(.init(path: path))
-            await memoryCache.set(path, dtos)
-            return dtos.models
+            return try await apiRequestParameters()
         }
+    }
+    
+    public func deleteAll() throws {
+        try modelContext.delete(model: Parameter.self)
+    }
+}
+
+private extension DefaultParameterRepository {
+    func apiRequestParameters() async throws -> [Parameter] {
+        let dtos: [ParameterDTO] = try await apiClient.request(.init(path: path))
+        let parameters = dtos.models
+        try? storeParameters(parameters)
+        return parameters
+    }
+    
+    func storeParameters(_ parameter: [Parameter]) throws {
+        try parameter.forEach {
+            modelContext.insert($0)
+            try modelContext.save()
+        }
+    }
+    
+    func getStoredParameters() throws -> [Parameter] {
+        let parameters = FetchDescriptor<Parameter>()
+        return try modelContext.fetch(parameters)
     }
 }
 

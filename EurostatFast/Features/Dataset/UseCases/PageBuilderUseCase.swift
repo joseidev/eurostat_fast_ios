@@ -53,7 +53,7 @@ private extension [Metadata] {
 
 private extension Parameter {
     func getName(_ geoCode: String) -> String {
-        values.first(where: {$0.code == geoCode})?.description ?? ""
+        values.first(where: {$0.code == geoCode})?.valueDescription ?? ""
     }
 }
 

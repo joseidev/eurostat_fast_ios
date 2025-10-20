@@ -89,7 +89,7 @@ private extension EditPageViewModel {
     
     func buildGeoModels(_ metadata: [Metadata], _ geoParameter: Parameter) -> SelectorModels {
         let primarySelectorItems: [EditPageSelectorView.Item] = geoParameter.values.map {
-            .init(id: $0.code, name: $0.description)
+            .init(id: $0.code, name: $0.valueDescription)
         }
         // TODO: Hay que pasar también geo item seleccionado por si no todos los datasets están disponibles para
         // todos los geos.

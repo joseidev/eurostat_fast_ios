@@ -11,7 +11,7 @@ struct ParameterDTO: Codable {
         .init(
             code: code,
             name: name,
-            description: description,
+            parameterDescription: description,
             values: parameterValues.map(\.model)
         )
     }
@@ -22,8 +22,8 @@ extension ParameterDTO {
         let code: String
         let description: String
         
-        var model: Parameter.Value {
-            .init(code: code, description: description)
+        var model: ParameterValue {
+            .init(code: code, valueDescription: description)
         }
     }
 }

@@ -38,7 +38,7 @@ extension Container {
     var parameterRepository: Factory<ParameterRepository> {
         self { @MainActor in DefaultParameterRepository(
             apiClient: self.apliClient(),
-            memoryCache: self.memoryCache()
+            modelContext: self.modelContext
         )}
     }
     

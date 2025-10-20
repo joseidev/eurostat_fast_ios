@@ -1,35 +1,35 @@
 import Foundation
+import SwiftData
 
-public struct Parameter: Hashable, Identifiable {
-    public let code: String
-    public let name: String
-    public let description: String
-    public let values: [Value]
+@Model
+public final class Parameter: Hashable, Identifiable {
+    public var code: String
+    public var name: String
+    public var parameterDescription: String
+    public var values: [ParameterValue]
     
     public var id: String {
         code
     }
     
-    public init(code: String, name: String, description: String, values: [Value]) {
+    public init(code: String, name: String, parameterDescription: String, values: [ParameterValue]) {
         self.code = code
         self.name = name
-        self.description = description
+        self.parameterDescription = parameterDescription
         self.values = values
     }
 }
 
-public extension Parameter {
-    struct Value: Hashable {
-        public let code: String
-        public let description: String
-        
-        public init(code: String, description: String) {
-            self.code = code
-            self.description = description
-        }
+@Model
+public final class ParameterValue: Hashable {
+    public var code: String
+    public var valueDescription: String
+    
+    public init(code: String, valueDescription: String) {
+        self.code = code
+        self.valueDescription = valueDescription
     }
 }
-
 
 public extension [Parameter] {
     var geoParameter: Parameter? {
