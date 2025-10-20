@@ -31,8 +31,8 @@ struct EditPageView: View {
         .onChange(of: viewModel.presentationModel.selectedPageType) { _ , new in
             viewModel.onSelectPageType(new)
         }
-        .onAppear {
-            viewModel.onAppear()
+        .task {
+            await viewModel.onAppear()
         }
     }
 }
@@ -40,7 +40,7 @@ struct EditPageView: View {
 private struct HeaderView: View {
     let isNewPage: Bool
     let closeAction: () -> Void
-    let saveAction: () -> Void
+    let saveAction: () async -> Void
     
     var body: some View {
         HStack {
@@ -52,7 +52,9 @@ private struct HeaderView: View {
             Text(title)
             Spacer()
             Button(isNewPage ? String(localized: "Add") : String(localized: "Save")) {
-                saveAction()
+                Task {
+                    await saveAction()
+                }
             }
             .buttonStyle(.bordered)
         }

@@ -35,8 +35,6 @@ struct MainDatasetView: View {
         .fullScreenCover(isPresented: $isEditPageViewPresented) {
             EditPageView(viewModel: .init(
                 isNewPage: false,
-                metadata: viewModel.metadata,
-                geoParameter: viewModel.geoParameter,
                 onClose: {
                     isEditPageViewPresented = false
                 },
@@ -46,8 +44,6 @@ struct MainDatasetView: View {
         .fullScreenCover(isPresented: $isAddPageViewPresented) {
             EditPageView(viewModel: .init(
                 isNewPage: true,
-                metadata: viewModel.metadata,
-                geoParameter: viewModel.geoParameter,
                 onClose: {
                     isAddPageViewPresented = false
                 },

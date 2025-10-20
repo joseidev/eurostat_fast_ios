@@ -27,6 +27,11 @@ public struct DefaultParameterRepository: ParameterRepository, @unchecked Sendab
         }
     }
     
+    public func getGeoParameter() async throws -> Parameter? {
+        let parameters = try await requestParameters()
+        return parameters.geoParameter
+    }
+    
     public func deleteAll() throws {
         try modelContext.delete(model: Parameter.self)
     }

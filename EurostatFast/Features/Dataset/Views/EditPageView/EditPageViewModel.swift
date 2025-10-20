@@ -1,25 +1,28 @@
 import Domain
+import FactoryKit
 import SwiftUI
 
 @Observable
 final class EditPageViewModel {
     let isNewPage: Bool
-    let metadata: [Metadata]
-    let geoParameter: Parameter?
+    var metadata: [Metadata] = []
+    var geoParameter: Parameter?
     let onClose: () -> Void
-    let onSave: (SavedModel) -> Void
+    let onSave: (DatasetPageView.PresentationModel) -> Void
     var presentationModel: EditPageView.PresentationModel = .initial
+    @ObservationIgnored
+    @Injected(\.saveNewDatasetPageUseCase) var saveNewDatasetPageUseCase
+    @ObservationIgnored
+    @Injected(\.parameterRepository) var parameterRepository
+    @ObservationIgnored
+    @Injected(\.metadataRepository) var metadataRepository
     
     init(
         isNewPage: Bool,
-        metadata: [Metadata],
-        geoParameter: Parameter?,
         onClose: @escaping () -> Void,
-        onSave: @escaping (SavedModel) -> Void
+        onSave: @escaping (DatasetPageView.PresentationModel) -> Void
     ) {
         self.isNewPage = isNewPage
-        self.metadata = metadata
-        self.geoParameter = geoParameter
         self.onClose = onClose
         self.onSave = onSave
     }
@@ -28,19 +31,24 @@ final class EditPageViewModel {
 // View methods
 
 extension EditPageViewModel {
-    func onAppear() {
-        loadData()
+    func onAppear() async {
+        await loadData()
     }
     
     func onTapClose() {
         onClose()
     }
     
-    func onTapSave() {
-        guard let model = presentationModel.geoModel else {
+    func onTapSave() async {
+        guard let geoModel = presentationModel.geoModel else {
             return
         }
-        onSave(model)
+        do {
+            let model = try await saveNewDatasetPageUseCase.saveNewPage(geoModel)
+            onSave(model)
+        } catch {
+            //TODO: Handle error
+        }
     }
     
     func onSelectListItem(_ id: String) {
@@ -78,13 +86,21 @@ private extension EditPageViewModel {
         static let geoLabel = String(localized: "Geo items")
         static let datasetLabel = String(localized: "Dataset items")
     }
-    func loadData() {
-        guard
-            let geoParameter,
-            let model = buildGeoPresentationModel(metadata, geoParameter) else {
-            return
+    func loadData() async {
+        do {
+            let metadata = try await metadataRepository.requestMetadata()
+            guard
+                let geoParameter = try await parameterRepository.getGeoParameter(),
+                let model = buildGeoPresentationModel(metadata, geoParameter)
+            else {
+                return
+            }
+            self.geoParameter = geoParameter
+            self.metadata = metadata
+            presentationModel = model
+        } catch {
+            //TODO: Handle error
         }
-        presentationModel = model
     }
     
     func buildGeoModels(_ metadata: [Metadata], _ geoParameter: Parameter) -> SelectorModels {
