@@ -1,8 +1,15 @@
 import Domain
+import FactoryKit
 
 struct LoadDataMainDatasetViewUseCase {
-    func loadData() -> [DatasetPageView.PresentationModel]{
-        return []
+    @Injected(\.datasetPageRepository) var datasetPageRepository
+    @Injected(\.datasetPageViewPresentationModelRepository) var datasetPageViewPresentationModelRepository
+    func loadData() throws -> [DatasetPageView.PresentationModel] {
+//        try datasetPageRepository.deleteAll()
+//        try datasetPageViewPresentationModelRepository.deleteAll()
+        let aa = try datasetPageRepository.getModels()
+        let bb = try datasetPageViewPresentationModelRepository.getModels()
+        return bb
     }
 }
 

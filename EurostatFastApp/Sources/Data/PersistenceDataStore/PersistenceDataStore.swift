@@ -12,7 +12,8 @@ public struct DefaultPersistenceDataStore: PersistenceDataStore {
         let container = try ModelContainer(
             for: DatasetPage.self,
             Metadata.self,
-            Parameter.self
+            Parameter.self,
+            DatasetPageViewPresentationModel.self
         )
         return DefaultPersistenceDataStore(container: container)
     }

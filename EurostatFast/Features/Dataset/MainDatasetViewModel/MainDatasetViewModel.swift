@@ -14,12 +14,16 @@ final class MainDatasetViewModel {
 // MARK: - View actions
 extension MainDatasetViewModel {
     func onAppear() async {
-        let models = loadDataMainDatasetViewUseCase.loadData()
-        if models.isEmpty {
-            state = .empty
-            return
+        do {
+            let models = try loadDataMainDatasetViewUseCase.loadData()
+            if models.isEmpty {
+                state = .empty
+                return
+            }
+            state = .loaded(models)
+        } catch {
+            
         }
-        state = .loaded(models)
     }
 
     func onTapDeletePage(_ selectedPageIndex: Int) {
