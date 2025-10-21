@@ -20,6 +20,17 @@ extension DatasetPageView.PresentationModel {
     }
 }
 
+extension DatasetPageViewPresentationModel {
+    var presentationModel: DatasetPageView.PresentationModel {
+        .init(
+            datasetPageId: self.datasetPageID,
+            pageIndex: self.pageIndex,
+            name: self.name,
+            items: self.items.map { $0.presentationModel }
+        )
+    }
+}
+
 extension DatasetItemView.PresentationModel {
     var persistedModel: DatasetPageItem {
         .init(
@@ -30,8 +41,28 @@ extension DatasetItemView.PresentationModel {
     }
 }
 
+extension DatasetPageItem {
+    var presentationModel: DatasetItemView.PresentationModel {
+        .init(
+            id: self.id,
+            name: self.name,
+            datasetChartModels: self.datasetChartModels.map { $0.presentationModel }
+        )
+    }
+}
+
 extension DatasetChartView.PresentationModel {
     var persistedModel: DatasetChartModel {
+        .init(
+            id: self.id,
+            period: self.period,
+            value: self.value
+        )
+    }
+}
+
+extension DatasetChartModel {
+    var presentationModel: DatasetChartView.PresentationModel {
         .init(
             id: self.id,
             period: self.period,
