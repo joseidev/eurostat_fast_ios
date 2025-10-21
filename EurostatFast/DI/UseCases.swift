@@ -8,5 +8,9 @@ extension Container {
     var saveNewDatasetPageUseCase: Factory<SaveNewDatasetPageUseCase> {
         self { @MainActor in SaveNewDatasetPageUseCase()}
     }
+    
+    var loadDataMainDatasetViewUseCase: Factory<LoadDataMainDatasetViewUseCase> {
+        self { @MainActor in LoadDataMainDatasetViewUseCase() }
+    }
 }
 

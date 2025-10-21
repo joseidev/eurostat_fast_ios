@@ -6,13 +6,20 @@ import SwiftUI
 
 @Observable
 final class MainDatasetViewModel {
+    @ObservationIgnored
+    @Injected(\.loadDataMainDatasetViewUseCase) var loadDataMainDatasetViewUseCase
     var state: State = .loading
 }
 
 // MARK: - View actions
 extension MainDatasetViewModel {
     func onAppear() async {
-        state = .empty
+        let models = loadDataMainDatasetViewUseCase.loadData()
+        if models.isEmpty {
+            state = .empty
+            return
+        }
+        state = .loaded(models)
     }
 
     func onTapDeletePage(_ selectedPageIndex: Int) {
