@@ -51,8 +51,14 @@ extension DefaultDatasetPageRepository: DatasetPageRepository {
         }
     }
     
-    public func delete(_ datasetPage: DatasetPage) {
-        modelContext.delete(datasetPage)
+    public func delete(_ id: String) throws {
+        let descriptor = FetchDescriptor<DatasetPage>(
+            predicate: #Predicate { $0.id == id }
+        )
+        guard let model = try modelContext.fetch(descriptor).first else {
+            throw APIError.notFoundInCache
+        }
+        modelContext.delete(model)
     }
     
     public func deleteAll() throws {

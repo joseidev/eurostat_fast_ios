@@ -12,5 +12,9 @@ extension Container {
     var loadDataMainDatasetViewUseCase: Factory<LoadDataMainDatasetViewUseCase> {
         self { @MainActor in LoadDataMainDatasetViewUseCase() }
     }
+    
+    var deleteDatasetPageUseCase: Factory<DeleteDatasetPageUseCase> {
+        self { @MainActor in DeleteDatasetPageUseCase() }
+    }
 }
 

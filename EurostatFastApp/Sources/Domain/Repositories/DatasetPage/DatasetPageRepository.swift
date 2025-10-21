@@ -9,6 +9,6 @@ public protocol DatasetPageRepository: Sendable {
         geoCode: String,
         datasetCodes: [String]
     ) throws
-    func delete(_ datasetPage: DatasetPage)
+    func delete(_ id: String) throws
     func deleteAll() throws
 }

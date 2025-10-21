@@ -26,7 +26,13 @@ extension DefaultDatasetPageViewPresentationModelRepository: DatasetPageViewPres
         return try modelContext.fetch(models)
     }
     
-    public func delete(_ model: DatasetPageViewPresentationModel) {
+    public func delete(_ id: String) throws {
+        let descriptor = FetchDescriptor<DatasetPageViewPresentationModel>(
+            predicate: #Predicate { $0.datasetPageID == id }
+        )
+        guard let model = try modelContext.fetch(descriptor).first else {
+            throw APIError.notFoundInCache
+        }
         modelContext.delete(model)
     }
     

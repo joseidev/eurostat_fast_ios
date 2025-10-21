@@ -8,6 +8,8 @@ import SwiftUI
 final class MainDatasetViewModel {
     @ObservationIgnored
     @Injected(\.loadDataMainDatasetViewUseCase) var loadDataMainDatasetViewUseCase
+    @ObservationIgnored
+    @Injected(\.deleteDatasetPageUseCase) var deleteDatasetPageUseCase
     var state: State = .loading
     var isConfirmDeletePageVisible: Bool = false
     private var models: [DatasetPageView.PresentationModel] = []
@@ -38,14 +40,20 @@ extension MainDatasetViewModel {
         guard let index = models.firstIndex(where: {$0.pageIndex == selectedPageIndex}) else {
             return
         }
-        models.remove(at: index)
-        state = .loaded(self.models)
+        do {
+            try deleteDatasetPageUseCase.delete(models[index].datasetPageId)
+            models.remove(at: index)
+            state = .loaded(self.models)
+        } catch {
+            
+        }
     }
 
     @MainActor
     func onSaveNewPage(_ savedModel: DatasetPageView.PresentationModel) async {
         self.models.append(savedModel)
         state = .loaded(self.models)
+        //TODO: Update selected page index
     }
 }
 
