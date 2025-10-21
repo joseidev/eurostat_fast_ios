@@ -23,7 +23,7 @@ struct MainDatasetView: View {
                 DataSetPageScrollView(selectedPageIndex: $selectedPageIndex) {
                     ForEach(pages, id: \.self) { page in
                         DatasetPageView(presentationModel: page)
-                            .tag(page.index)
+                            .tag(page.pageIndex)
                     }
                 }
             }

@@ -16,6 +16,15 @@ extension DefaultDatasetPageRepository: DatasetPageRepository {
         try modelContext.save()
     }
     
+    public func getModels() throws -> [DatasetPage] {
+        let datasetPages = FetchDescriptor<DatasetPage>(
+            sortBy: [
+                .init(\.pageIndex)
+            ]
+        )
+        return try modelContext.fetch(datasetPages)
+    }
+    
     public func getLastPageIndex() throws -> Int? {
         let datasetPages = FetchDescriptor<DatasetPage>(
             sortBy: [

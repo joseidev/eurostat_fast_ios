@@ -1,7 +1,11 @@
 extension DatasetPageView {
     struct PresentationModel: Hashable {
-        let index: Int
+        let datasetPageId: String
+        let pageIndex: Int
         let name: String
         let items: [DatasetItemView.PresentationModel]
     }
 }
+
+
+

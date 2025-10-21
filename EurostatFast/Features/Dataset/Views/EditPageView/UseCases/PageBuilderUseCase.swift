@@ -7,13 +7,15 @@ struct PageBuilderUseCase {
     @Injected(\.datasetDataRepository) var datasetDataRepository
     
     func buildGeoModel(
-        _ index: Int,
+        _ datasetPageId: String,
+        _ pageIndex: Int,
         _ model: EditPageViewModel.SavedModel.Geo,
         _ metadata: [Metadata],
         _ geoParameter: Parameter
     ) async throws -> DatasetPageView.PresentationModel {
         .init(
-            index: index,
+            datasetPageId: datasetPageId,
+            pageIndex: pageIndex,
             name: geoParameter.getName(model.geoCode),
             items: try await getItems(model.datasetCodes, model.geoCode, metadata)
         )

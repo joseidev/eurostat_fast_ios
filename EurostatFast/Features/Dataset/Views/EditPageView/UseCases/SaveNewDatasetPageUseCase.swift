@@ -26,8 +26,10 @@ private extension SaveNewDatasetPageUseCase {
         }
         let lastPageIndex = try datasetPageRepository.getLastPageIndex() ?? -1
         let pageIndex = lastPageIndex + 1
-        try datasetPageRepository.store(geoModel.buildNewDatasetPage(pageIndex))
+        let datasetPageModel = geoModel.buildNewDatasetPage(pageIndex)
+        try datasetPageRepository.store(datasetPageModel)
         return try await pageBuilderUseCase.buildGeoModel(
+            datasetPageModel.id,
             pageIndex,
             geoModel,
             metadata,
