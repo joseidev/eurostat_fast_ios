@@ -7,6 +7,7 @@ struct SaveNewDatasetPageUseCase {
     @Injected(\.datasetPageRepository) var datasetPageRepository
     @Injected(\.parameterRepository) var parameterRepository
     @Injected(\.metadataRepository) var metadataRepository
+    @Injected(\.datasetPageViewPresentationModelRepository) var datasetPageViewPresentationModelRepository
     
     func saveNewPage(
         _ savedModel: EditPageViewModel.SavedModel
@@ -28,13 +29,16 @@ private extension SaveNewDatasetPageUseCase {
         let pageIndex = lastPageIndex + 1
         let datasetPageModel = geoModel.buildNewDatasetPage(pageIndex)
         try datasetPageRepository.store(datasetPageModel)
-        return try await pageBuilderUseCase.buildGeoModel(
+        let presentationModel = try await pageBuilderUseCase.buildGeoModel(
             datasetPageModel.id,
             pageIndex,
             geoModel,
             metadata,
             geoParameter
         )
+        try datasetPageViewPresentationModelRepository
+            .store(presentationModel.persistedModel)
+        return presentationModel
     }
 }
 

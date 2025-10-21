@@ -54,4 +54,10 @@ extension Container {
             modelContext: self.modelContext
         )}
     }
+    
+    var datasetPageViewPresentationModelRepository: Factory<DatasetPageViewPresentationModelRepository> {
+        self { @MainActor in DefaultDatasetPageViewPresentationModelRepository(
+            modelContext: self.modelContext
+        )}
+    }
 }
