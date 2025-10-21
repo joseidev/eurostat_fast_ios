@@ -9,6 +9,7 @@ final class MainDatasetViewModel {
     @ObservationIgnored
     @Injected(\.loadDataMainDatasetViewUseCase) var loadDataMainDatasetViewUseCase
     var state: State = .loading
+    var isConfirmDeletePageVisible: Bool = false
     private var models: [DatasetPageView.PresentationModel] = []
 }
 
@@ -28,8 +29,17 @@ extension MainDatasetViewModel {
         }
     }
 
-    func onTapDeletePage(_ selectedPageIndex: Int) {
-        print("didTapDeletePage", selectedPageIndex)
+    func onTapDeletePage() {
+        isConfirmDeletePageVisible = true
+    }
+    
+    func onConfirmDeletePage(_ selectedPageIndex: Int) {
+        isConfirmDeletePageVisible = false
+        guard let index = models.firstIndex(where: {$0.pageIndex == selectedPageIndex}) else {
+            return
+        }
+        models.remove(at: index)
+        state = .loaded(self.models)
     }
 
     @MainActor

@@ -11,7 +11,7 @@ struct MainDatasetView: View {
             DatasetHeaderView(
                 editAction: { isEditPageViewPresented = true },
                 addAction: { isAddPageViewPresented = true },
-                deleteAction: { viewModel.onTapDeletePage(selectedPageIndex) }
+                deleteAction: { viewModel.onTapDeletePage() }
             )
             .padding()
             switch viewModel.state {
@@ -54,6 +54,24 @@ struct MainDatasetView: View {
                     }
                 }
             ))
+        }
+        .alert(isPresented: $viewModel.isConfirmDeletePageVisible) {
+            Alert(
+                title: Text("Delete page"),
+                message: Text("Do you want to delete this page?"),
+                primaryButton: .default(
+                    Text("Cancel"),
+                    action: {
+                        viewModel.isConfirmDeletePageVisible = false
+                    }
+                ),
+                secondaryButton: .destructive(
+                    Text("Delete"),
+                    action: {
+                        viewModel.onConfirmDeletePage(selectedPageIndex)
+                    }
+                )
+            )
         }
     }
 }
